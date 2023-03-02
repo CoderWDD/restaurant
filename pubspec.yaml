@@ -87,7 +87,18 @@ flutter:
       fonts:
         - asset: assets/fonts/poppins_semi_bold.ttf
           style: normal
-
+    - family: PoppinsLight
+      fonts:
+        - asset: assets/fonts/poppins_light.ttf
+          style: normal
+    - family: PoppinsRegular
+      fonts:
+        - asset: assets/fonts/poppins_regular.ttf
+          style: normal
+    - family: PoppinsMedium
+      fonts:
+        - asset: assets/fonts/poppins_medium.ttf
+          style: normal
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
