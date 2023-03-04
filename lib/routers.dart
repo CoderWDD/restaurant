@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restaurant/screens/food_detail/food_details_screen.dart';
 import 'package:restaurant/screens/register/register_screen.dart';
 import 'package:restaurant/screens/splash/splash_screen.dart';
 
@@ -11,7 +12,7 @@ final GoRouter routers = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (context, state) => MyHomePage(),
+      builder: (context, state) => FoodDetailScreen(),
       routes: const <RouteBase>[],
     ),
     GoRoute(
