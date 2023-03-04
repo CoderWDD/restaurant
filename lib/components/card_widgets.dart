@@ -215,14 +215,13 @@ class CategoriesCard extends StatelessWidget {
   }
 }
 
-
-
-
-
 class IngredientsCard extends StatefulWidget {
   final String? ingredientUrl;
   final String? ingredientName;
-  const IngredientsCard({Key? key, required this.ingredientUrl, required this.ingredientName}) : super(key: key);
+
+  const IngredientsCard(
+      {Key? key, required this.ingredientUrl, required this.ingredientName})
+      : super(key: key);
 
   @override
   State<IngredientsCard> createState() => _IngredientsCardState();
@@ -246,7 +245,7 @@ class _IngredientsCardState extends State<IngredientsCard> {
           ],
         ),
         child: InkWell(
-          onTap: (){},
+          onTap: () {},
           borderRadius: BorderRadius.circular(13.px3pt),
           child: SizedBox(
             width: 100.px3pt,
@@ -259,29 +258,26 @@ class _IngredientsCardState extends State<IngredientsCard> {
                   height: 64.px3pt,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(13.px3pt),
-                    child: Image.network(
-                        widget.ingredientUrl ?? '',
+                    child: Image.network(widget.ingredientUrl ?? '',
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
                                   loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(
-                            child: Icon(
-                              Icons.error,
-                              color: Colors.red,
-                            ),
-                          );
-                        }
-                    ),
+                              : null,
+                        ),
+                      );
+                    }, errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
+                      );
+                    }),
                   ),
                 ),
                 SizedBox(height: 8.px3pt),
@@ -302,76 +298,3 @@ class _IngredientsCardState extends State<IngredientsCard> {
     );
   }
 }
-
-
-// class sss extends StatelessWidget {
-//   final String? ingredientUrl;
-//   final String? ingredientName;
-//   const IngredientsCard({Key? key, required this.ingredientUrl, required this.ingredientName}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: EdgeInsets.only(right: 14.px3pt),
-//       height: 90.px3pt,
-//       width: 100.px3pt,
-//       decoration: BoxDecoration(
-//         color: const Color(0xFFFFFFFF),
-//         borderRadius: BorderRadius.circular(14.px3pt),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.grey.withOpacity(0.2),
-//             blurRadius: 2,
-//             offset: const Offset(4, 4),
-//           ),
-//         ],
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           SizedBox(
-//             width: 64.px3pt,
-//             height: 64.px3pt,
-//             child: ClipRRect(
-//               borderRadius: BorderRadius.circular(13.px3pt),
-//               child: Image.network(
-//                 ingredientUrl ?? '',
-//                 fit: BoxFit.cover,
-//                 loadingBuilder: (context, child, loadingProgress) {
-//                   if (loadingProgress == null) return child;
-//                   return Center(
-//                     child: CircularProgressIndicator(
-//                       value: loadingProgress.expectedTotalBytes != null
-//                           ? loadingProgress.cumulativeBytesLoaded /
-//                               loadingProgress.expectedTotalBytes!
-//                           : null,
-//                     ),
-//                   );
-//                 },
-//                 errorBuilder: (context, error, stackTrace) {
-//                   return const Center(
-//                     child: Icon(
-//                       Icons.error,
-//                       color: Colors.red,
-//                     ),
-//                   );
-//                 }
-//               ),
-//             ),
-//           ),
-//           SizedBox(height: 8.px3pt),
-//           Text(
-//             ingredientName ?? '',
-//             style: TextStyle(
-//               color: const Color(0xFF7D7871),
-//               fontFamily: 'PoppinsMedium',
-//               fontSize: 12.px3pt,
-//               fontWeight: FontWeight.normal,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:restaurant/utils/px2dp.dart';
@@ -16,7 +14,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
-
   late TabController _tabController;
   static List<String> tabTitles = [
     'Burger',
@@ -27,7 +24,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     'Burger',
     'Burger'
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +85,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                         itemBuilder: (BuildContext context, int index) {
                           return PromotionsCard(
                             url:
-                            'https://docs.flutter.dev/assets/images/docs/ui/layout/layout-4.png',
+                                'https://docs.flutter.dev/assets/images/docs/ui/layout/layout-4.png',
                             title: 'Hello',
                             description: 'ssss',
                             price: "\$123.9",
@@ -161,8 +157,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                 controller: _tabController,
                 tabs: tabTitles
                     .map((tabTitle) => Tab(
-                  text: tabTitle,
-                ))
+                          text: tabTitle,
+                        ))
                     .toList(),
               ),
             ),
@@ -176,12 +172,12 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             children: tabTitles
                 .map(
                   (tabTitle) => ListView.builder(
-                itemCount: 20,
-                itemBuilder: (BuildContext context, int index) {
-                  return CategoriesCard();
-                },
-              ),
-            )
+                    itemCount: 20,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CategoriesCard();
+                    },
+                  ),
+                )
                 .toList()),
       ),
     );
@@ -216,4 +212,3 @@ class _TabLayoutDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(_TabLayoutDelegate oldDelegate) => false;
 }
-

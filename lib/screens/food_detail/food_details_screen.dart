@@ -126,14 +126,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 ),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => ListTile(
-                  title: Text('Item $index'),
-                ),
-                childCount: 100,
-              ),
-            ),
           ];
         },
         body: const Center(
