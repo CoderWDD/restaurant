@@ -11,6 +11,7 @@ import 'package:restaurant/utils/px2dp.dart';
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
+import 'drawer_menu.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -44,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Drawer(),
+      drawer: const DrawerMenu(),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: const Color(0xFFF69B14),
         elevation: 12.px3pt,
