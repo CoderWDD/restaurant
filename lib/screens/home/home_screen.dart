@@ -27,8 +27,15 @@ class _MyHomePageState extends State<MyHomePage>{
   final List<Widget> _children = [
     HomeTab(),
     LikeTab(),
-    OrdersTab(),
+    OrdersScreen(),
     PersonTab()
+  ];
+
+  final List<String> _title = [
+    'Home',
+    'Like',
+    'Orders',
+    'Me'
   ];
 
   @override
@@ -82,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage>{
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Home',
+          _title[_selectedIndex],
           style: TextStyle(
               fontFamily: 'PoppinsSemiBold',
               fontSize: 16.px3pt,
