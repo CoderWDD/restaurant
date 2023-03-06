@@ -81,6 +81,7 @@ class RegisterScreen extends StatelessWidget {
                     child: InputWidget(
                       labelText: 'Name',
                       onValueChanged: (value) {},
+                      textInputAction: TextInputAction.next,
                     ),
                   ),
                   Container(
@@ -88,6 +89,7 @@ class RegisterScreen extends StatelessWidget {
                     child: InputWidget(
                       labelText: 'Phone Number',
                       onValueChanged: (value) {},
+                      textInputAction: TextInputAction.next,
                     ),
                   ),
                   Container(
@@ -96,6 +98,7 @@ class RegisterScreen extends StatelessWidget {
                       labelText: 'Password',
                       isPassword: true,
                       onValueChanged: (value) {},
+                      textInputAction: TextInputAction.done,
                     ),
                   ),
                   RegisterOrLoginButton(text: 'Register',),

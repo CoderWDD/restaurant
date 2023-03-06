@@ -12,7 +12,8 @@ class InputWidget extends StatefulWidget {
   final ValueChanged<String>? onValueChanged;
   final String? labelText;
   final bool? isPassword;
-  const InputWidget({ super.key, this.labelText, this.isPassword, this.onValueChanged, this.onValueSubmitted});
+  final TextInputAction textInputAction;
+  const InputWidget({ super.key, this.labelText, this.isPassword, this.onValueChanged, this.onValueSubmitted, required this.textInputAction});
 
   @override
   State<StatefulWidget> createState() => _InputState();
@@ -25,7 +26,7 @@ class _InputState extends State<InputWidget> {
       obscureText: widget.isPassword ?? false,
       autofocus: true,
       maxLines: 1,
-      textInputAction: TextInputAction.next,
+      textInputAction: widget.textInputAction,
       onChanged: widget.onValueChanged,
       onFieldSubmitted: widget.onValueSubmitted,
       decoration: InputDecoration(
