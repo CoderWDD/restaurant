@@ -13,7 +13,7 @@ final GoRouter routers = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (context, state) => LoginScreen(),
+      builder: (context, state) => MyHomePage(),
       routes: const <RouteBase>[],
     ),
     GoRoute(
