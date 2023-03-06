@@ -19,30 +19,30 @@ class _RegisterOrLoginButtonState extends State<RegisterOrLoginButton> {
     return Container(
       width: getScreenMaxWidth(),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFFFF9A3F),
-            Color(0xFFFFAC61),
-          ],
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-        ),
-        borderRadius: BorderRadius.circular(50.px3pt)
-      ),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFFFF9A3F),
+              Color(0xFFFFAC61),
+            ],
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          ),
+          borderRadius: BorderRadius.circular(50.px3pt)),
       child: FilledButton(
-
         onPressed: widget.onPressed,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
           foregroundColor: MaterialStateProperty.all(Colors.white),
-
         ),
-        child: Text(widget.text, style: TextStyle(
-          fontFamily: 'NunitoSansRegular',
-          fontSize: 16.px3pt,
-          fontWeight: FontWeight.w600,
-          color: Colors.white,
-        ),),
+        child: Text(
+          widget.text,
+          style: TextStyle(
+            fontFamily: 'NunitoSansRegular',
+            fontSize: 16.px3pt,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

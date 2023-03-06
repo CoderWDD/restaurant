@@ -12,12 +12,12 @@ final GoRouter routers = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (context, state) => MyHomePage(),
+      builder: (context, state) => SplashScreen( onLoginPressed: (){}, onRegisterPressed: (){},),
       routes: const <RouteBase>[],
     ),
     GoRoute(
       path: '/splash',
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => SplashScreen( onLoginPressed: (){}, onRegisterPressed: (){},),
     ),
   ],
 );
