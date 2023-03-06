@@ -11,7 +11,7 @@ import 'package:restaurant/utils/px2dp.dart';
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
-import 'drawer_menu.dart';
+import '../menu_drawer/drawer_menu.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

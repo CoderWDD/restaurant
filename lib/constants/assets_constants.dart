@@ -10,3 +10,4 @@ const String ordersIllustration = 'assets/images/orders_illustration.svg';
 const String personIllustration = 'assets/images/person_illustration.svg';
 const String drawerHeaderIllustration = 'assets/images/drawer_illustration.png';
 const String splashIllustration = 'assets/images/splash_illustration.svg';
+const String loginIllustration = 'assets/images/login_illustration.svg';
