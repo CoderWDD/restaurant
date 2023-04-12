@@ -64,6 +64,7 @@ class _PersonTabState extends State<PersonTab> {
                         ],
                       ),
                     ),
+                    const Icon(Icons.edit)
                   ],
                 ),
               ),

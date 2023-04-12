@@ -95,6 +95,12 @@ class _MyHomePageState extends State<MyHomePage>{
               fontSize: 16.px3pt,
               fontWeight: FontWeight.w600),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search),
+          ),
+        ],
       ),
       body: _children[_selectedIndex],
     );
