@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage>{
 
   final List<String> _title = [
     'Home',
-    'Like',
+    'My Favorites',
     'Orders',
     'Me'
   ];
@@ -78,7 +78,8 @@ class _MyHomePageState extends State<MyHomePage>{
               icon: SvgPicture.asset(
                 likeIllustration,
               ),
-              label: 'Like',
+              label: 'Favorites',
+
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(

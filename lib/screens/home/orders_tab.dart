@@ -301,95 +301,81 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 itemCount: _orders.length,
                 itemBuilder: (context, index) {
                   final order = _orders[index];
-                  return ListTile(
-                    visualDensity: const VisualDensity(vertical: -1),
-                    title: Container(
-                      margin: EdgeInsets.only(top: 8.px3pt),
-                      padding: EdgeInsets.only(
-                          top: 8.px3pt, bottom: 8.px3pt, right: 16.px3pt),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16.px3pt),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 8.px3pt,
-                            offset: Offset(2, 2.px3pt),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Checkbox(
-                            value: order.isSelected,
-                            shape: const CircleBorder(),
-                            onChanged: (value) {
-                              order.isSelected = value!;
-                              bool isAllSelected = true;
-                              for (var order in _orders) {
-                                if (!order.isSelected) {
-                                  isAllSelected = false;
-                                }
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.px3pt),
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 16.px3pt, vertical: 8.px3pt),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Checkbox(
+                          value: order.isSelected,
+                          shape: const CircleBorder(),
+                          onChanged: (value) {
+                            order.isSelected = value!;
+                            bool isAllSelected = true;
+                            for (var order in _orders) {
+                              if (!order.isSelected) {
+                                isAllSelected = false;
                               }
-
-                              setState(() {
-                                _checkAll = isAllSelected;
-                              });
-                            },
-                            side: const BorderSide(
-                              width: 2,
-                              color: Color(0xFF6750A4),
-                            ),
-                            checkColor: const Color(0xFF6750A4),
-                            fillColor: MaterialStateProperty.resolveWith((states) {
-                              if (states.contains(MaterialState.disabled)) {
-                                return Colors.grey.shade400;
-                              }
-                              return Colors.white;
-                            }),
+                            }
+                            setState(() {
+                              _checkAll = isAllSelected;
+                            });
+                          },
+                          side: const BorderSide(
+                            width: 2,
+                            color: Color(0xFF6750A4),
                           ),
-                          const SizedBox(width: 8),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(16.px3pt),
-                            child: Image.network(
-                              tempUrl,
-                              width: 76.px3pt,
-                              height: 76.px3pt,
-                              fit: BoxFit.cover,
-                            ),
+                          checkColor: const Color(0xFF6750A4),
+                          fillColor: MaterialStateProperty.resolveWith((states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return Colors.grey.shade400;
+                            }
+                            return Colors.white;
+                          }),
+                        ),
+                        const SizedBox(width: 8),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16.px3pt),
+                          child: Image.network(
+                            tempUrl,
+                            width: 76.px3pt,
+                            height: 76.px3pt,
+                            fit: BoxFit.cover,
                           ),
-                          SizedBox(width: 16.px3pt),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                        ),
+                        SizedBox(width: 16.px3pt),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Order ${order.id}',
+                                style: TextStyle(
+                                  fontSize: 16.px3pt,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'PoppinsMedium',
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              SizedBox(height: 4.px3pt),
+                              for (final item in order.products)
                                 Text(
-                                  'Order ${order.id}',
+                                  '${item.title}: \$${item.price}',
                                   style: TextStyle(
-                                    fontSize: 16.px3pt,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'PoppinsMedium',
-                                    color: Theme.of(context).colorScheme.primary,
+                                    fontSize: 14.px3pt,
+                                    height: 1.5,
+                                    fontFamily: 'PoppinsRegular',
+                                    color: Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
-                                SizedBox(height: 4.px3pt),
-                                for (final item in order.products)
-                                  Text(
-                                    '${item.title}: \$${item.price}',
-                                    style: TextStyle(
-                                      fontSize: 14.px3pt,
-                                      height: 1.5,
-                                      fontFamily: 'PoppinsRegular',
-                                      color: Theme.of(context).colorScheme.secondary,
-                                    ),
-                                  ),
-                                const SizedBox(height: 8),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   );
                 },
