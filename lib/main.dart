@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant/viewmodel/user_view_model.dart';
 
 import 'md3/color_schemes.g.dart';
 
@@ -9,7 +11,17 @@ import 'routers.dart';
 void main() {
   runZonedGuarded(
     () {
-      runApp(const MyApp());
+      runApp(
+        MultiProvider(
+          providers: [
+            // user view model
+            ChangeNotifierProvider(
+              create: (_) => UserViewModel(),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
     },
     (Object obj, StackTrace stack) {},
   );

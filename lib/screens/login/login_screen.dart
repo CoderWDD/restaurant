@@ -13,14 +13,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => UserViewModel(),
-          child: const LoginScaffold(),
-        ),
-      ],
-    );
+    return const LoginScaffold();
   }
 }
 

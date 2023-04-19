@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
 import '../../components/card_widgets.dart';
+import '../../md3/color_schemes.g.dart';
 
 class FoodDetailScreen extends StatefulWidget {
   const FoodDetailScreen({Key? key}) : super(key: key);
@@ -18,24 +19,31 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              leading: const Icon(Icons.arrow_back_ios),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  // handle back button press
+                },
+              ),
               actions: [
                 IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.favorite_border))
+                  icon: const Icon(Icons.favorite_border),
+                  onPressed: () {
+                    // handle favorite button press
+                  },
+                ),
               ],
               centerTitle: true,
               title: const Text('Food details'),
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(24.0.px3pt),
-                        bottomRight: Radius.circular(24.0.px3pt),
-                      ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(24.0.px3pt),
+                      bottomRight: Radius.circular(24.0.px3pt),
                     ),
-                    color: Colors.yellow,
+                    color: Theme.of(context).colorScheme.surface,
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: Image.network(
@@ -47,63 +55,64 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 ),
               ),
               expandedHeight: 320.px3pt,
-              // add additional properties as needed
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
+              iconTheme: IconThemeData(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              elevation: 4.0, toolbarTextStyle: Theme.of(context).textTheme.apply(
+                bodyColor: Theme.of(context).colorScheme.onSurface,
+                displayColor: Theme.of(context).colorScheme.onSurface,
+              ).bodyMedium, titleTextStyle: Theme.of(context).textTheme.apply(
+                bodyColor: Theme.of(context).colorScheme.onSurface,
+                displayColor: Theme.of(context).colorScheme.onSurface,
+              ).titleLarge,
             ),
             SliverToBoxAdapter(
               child: Padding(
-                  padding: EdgeInsets.only(left: 14.px3pt, top: 14.px3pt),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Food name',
-                        style: TextStyle(
-                            fontFamily: 'PoppinsMedium',
-                            fontSize: 18.px3pt,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF242321)),
+                padding: EdgeInsets.only(left: 14.px3pt, top: 14.px3pt),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Food name',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(
-                        height: 8.px3pt,
+                    ),
+                    SizedBox(height: 8.px3pt),
+                    Text(
+                      '\$26.99',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.w400,
                       ),
-                      Text(
-                        '\$26.99',
-                        style: TextStyle(
-                          fontSize: 26.px3pt,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFFFFA41D),
-                          fontFamily: 'PoppinsMedium',
-                        ),
+                    ),
+                    SizedBox(height: 14.px3pt),
+                    Text(
+                      'Food price',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.normal,
                       ),
-                      SizedBox(
-                        height: 14.px3pt,
-                      ),
-                      Text(
-                        'Food price',
-                        style: TextStyle(
-                          fontSize: 14.px3pt,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFF7D7871),
-                          fontFamily: 'PoppinsRegular',
-                        ),
-                      ),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.only(
-                    left: 14.px3pt, right: 14.px3pt, top: 30.px3pt),
+                padding: EdgeInsets.only(left: 14.px3pt, right: 14.px3pt, top: 30.px3pt),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Ingredients',
-                      style: TextStyle(
-                          color: const Color(0xFF242321),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.px3pt,
-                          fontFamily: 'PoppinsMedium'),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 14.px3pt, bottom: 14.px3pt),
@@ -115,7 +124,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                           itemBuilder: (context, index) {
                             return const IngredientsCard(
                               ingredientUrl:
-                                  'https://media.wired.com/photos/598e35fb99d76447c4eb1f28/16:9/w_2123,h_1194,c_limit/phonepicutres-TA.jpg',
+                              'https://media.wired.com/photos/598e35fb99d76447c4eb1f28/16:9/w_2123,h_1194,c_limit/phonepicutres-TA.jpg',
                               ingredientName: 'name',
                             );
                           },

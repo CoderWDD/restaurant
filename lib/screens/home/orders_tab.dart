@@ -302,6 +302,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 itemBuilder: (context, index) {
                   final order = _orders[index];
                   return ListTile(
+                    visualDensity: const VisualDensity(vertical: -1),
                     title: Container(
                       margin: EdgeInsets.only(top: 8.px3pt),
                       padding: EdgeInsets.only(
@@ -321,53 +322,67 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Checkbox(
-                              value: order.isSelected,
-                              shape: const CircleBorder(),
-                              onChanged: (value) {
-                                order.isSelected = value!;
-                                bool isAllSelected = true;
-                                for (var order in _orders) {
-                                  if (!order.isSelected) {
-                                    isAllSelected = false;
-                                  }
+                            value: order.isSelected,
+                            shape: const CircleBorder(),
+                            onChanged: (value) {
+                              order.isSelected = value!;
+                              bool isAllSelected = true;
+                              for (var order in _orders) {
+                                if (!order.isSelected) {
+                                  isAllSelected = false;
                                 }
+                              }
 
-                                setState(() {
-                                  _checkAll = isAllSelected;
-                                });
-                              }),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.px3pt),
-                              image: DecorationImage(
-                                image: NetworkImage(tempUrl),
-                                fit: BoxFit.cover,
-                              ),
+                              setState(() {
+                                _checkAll = isAllSelected;
+                              });
+                            },
+                            side: const BorderSide(
+                              width: 2,
+                              color: Color(0xFF6750A4),
                             ),
-                            width: 76.px3pt,
-                            height: 76.px3pt,
+                            checkColor: const Color(0xFF6750A4),
+                            fillColor: MaterialStateProperty.resolveWith((states) {
+                              if (states.contains(MaterialState.disabled)) {
+                                return Colors.grey.shade400;
+                              }
+                              return Colors.white;
+                            }),
                           ),
-                          SizedBox(
-                            width: 16.px3pt,
+                          const SizedBox(width: 8),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16.px3pt),
+                            child: Image.network(
+                              tempUrl,
+                              width: 76.px3pt,
+                              height: 76.px3pt,
+                              fit: BoxFit.cover,
+                            ),
                           ),
+                          SizedBox(width: 16.px3pt),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Order ${order.id}',
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'PopinsMedium',
-                                      color: Color(0xFF121212)),
+                                  style: TextStyle(
+                                    fontSize: 16.px3pt,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'PoppinsMedium',
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
                                 ),
                                 SizedBox(height: 4.px3pt),
                                 for (final item in order.products)
                                   Text(
                                     '${item.title}: \$${item.price}',
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Color(0xFFAAAAAA)),
+                                    style: TextStyle(
+                                      fontSize: 14.px3pt,
+                                      height: 1.5,
+                                      fontFamily: 'PoppinsRegular',
+                                      color: Theme.of(context).colorScheme.secondary,
+                                    ),
                                   ),
                                 const SizedBox(height: 8),
                               ],
@@ -382,13 +397,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(16.px3pt), topRight: Radius.circular(16.px3pt)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    blurRadius: 8.px3pt,
-                    offset: Offset(0, -2.px3pt),
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.16),
+                    blurRadius: 16.px3pt,
+                    offset: Offset(0, 4.px3pt),
                   ),
                 ],
               ),
@@ -407,20 +422,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         _getTotalPrice();
                       });
                     },
+                    fillColor: MaterialStateColor.resolveWith((states) => Theme.of(context).colorScheme.primary),
                   ),
                   const Text(
-                    'SelectAll',
-                    style: TextStyle(fontSize: 16),
+                    'Select All',
+                    style: TextStyle(fontSize: 16, fontFamily: 'RobotoMedium'),
                   ),
                   SizedBox(
                     width: 32.px3pt,
                   ),
                   Text(
                     'Total: \$$_totalPrice',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xFFFF9A51),
-                      fontFamily: 'PoppinsSemiBold',
+                      color: Theme.of(context).colorScheme.primary,
+                      fontFamily: 'RobotoMedium',
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -434,11 +450,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
           right: 0,
           child: Container(
             padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF9A51),
+                foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.primary,
               ),
               child: Text(
                 'Pay',

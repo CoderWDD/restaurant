@@ -4,10 +4,10 @@ import 'package:restaurant/utils/px2dp.dart';
 
 class DrawerMenu extends StatefulWidget {
   final String? name;
-  final String? locate;
+  final String? email;
   final String? avatarUrl;
 
-  const DrawerMenu({Key? key, this.name, this.locate, this.avatarUrl})
+  const DrawerMenu({Key? key, this.name, this.email, this.avatarUrl})
       : super(key: key);
 
   @override
@@ -101,7 +101,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                         ),
                         SizedBox(height: 4.0.px3pt),
                         Text(
-                          widget.locate ?? 'Locate',
+                          widget.email ?? 'email',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.0.px3pt,

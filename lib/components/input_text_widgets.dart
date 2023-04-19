@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
 import '../constants/assets_constants.dart';
+import '../md3/color_schemes.g.dart';
 
 typedef OnChangeCallback = void Function(String value);
 
@@ -80,54 +81,51 @@ class _SearchTrackingWidgetState extends State<SearchTrackingWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 55.px3pt,
       margin: EdgeInsets.only(top: 22.px3pt),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18.px3pt),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
+        ),
+      ),
       child: TextField(
         decoration: InputDecoration(
           border: InputBorder.none,
-          disabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Color(0xFF23252F),
-            ),
-            borderRadius: BorderRadius.circular(18.px3pt),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Color(0xFFE7E7E7),
-            ),
-            borderRadius: BorderRadius.circular(18.px3pt),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: const Color(0xFFFF9A51).withOpacity(0.5),
-            ),
-            borderRadius: BorderRadius.circular(18.px3pt),
-          ),
           hintText: widget.hintText ?? 'Enter tracking number',
           hintStyle: TextStyle(
-            color: const Color(0xFF23252F).withOpacity(0.5),
+            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
             fontSize: 13.px3pt,
             fontWeight: FontWeight.w400,
           ),
-          prefixIcon: IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              searchNormalIllustration,
-              width: 20.px3pt,
-              height: 20.px3pt,
-              fit: BoxFit.scaleDown,
+          prefixIcon: InkWell(
+            onTap: () {
+              setState(() {
+                widget.onChangeCallback('');
+              });
+            },
+            child: Padding(
+              padding: EdgeInsets.all(8.0.px3pt),
+              child: SvgPicture.asset(
+                searchNormalIllustration,
+                width: 20.px3pt,
+                height: 20.px3pt,
+                fit: BoxFit.scaleDown,
+                color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+              ),
             ),
           ),
-          suffixIcon: IconButton(
-            icon: SvgPicture.asset(
-              filterIllustration,
-              width: 20.px3pt,
-              height: 20.px3pt,
-              fit: BoxFit.scaleDown,
+          suffixIcon: InkWell(
+            onTap: () {},
+            child: Padding(
+              padding: EdgeInsets.all(8.0.px3pt),
+              child: SvgPicture.asset(
+                filterIllustration,
+                width: 20.px3pt,
+                height: 20.px3pt,
+                fit: BoxFit.scaleDown,
+                color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+              ),
             ),
-            onPressed: () {
-              // Clear the text field
-            },
           ),
         ),
         onChanged: widget.onChangeCallback,
@@ -136,3 +134,61 @@ class _SearchTrackingWidgetState extends State<SearchTrackingWidget> {
     );
   }
 }
+
+
+
+// class _SearchTrackingWidgetState extends State<SearchTrackingWidget> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: EdgeInsets.only(top: 22.px3pt),
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(18.px3pt),
+//         border: Border.all(
+//           color: const Color(0xFFE7E7E7),
+//         ),
+//       ),
+//       child: TextField(
+//         decoration: InputDecoration(
+//           border: InputBorder.none,
+//           hintText: widget.hintText ?? 'Enter tracking number',
+//           hintStyle: TextStyle(
+//             color: const Color(0xFF23252F).withOpacity(0.5),
+//             fontSize: 13.px3pt,
+//             fontWeight: FontWeight.w400,
+//           ),
+//           prefixIcon: InkWell(
+//             onTap: () {
+//               setState(() {
+//                 widget.onChangeCallback('');
+//               });
+//             },
+//             child: Padding(
+//               padding: EdgeInsets.all(8.0.px3pt),
+//               child: SvgPicture.asset(
+//                 searchNormalIllustration,
+//                 width: 20.px3pt,
+//                 height: 20.px3pt,
+//                 fit: BoxFit.scaleDown,
+//               ),
+//             ),
+//           ),
+//           suffixIcon: InkWell(
+//             onTap: () {},
+//             child: Padding(
+//               padding: EdgeInsets.all(8.0.px3pt),
+//               child: SvgPicture.asset(
+//                 filterIllustration,
+//                 width: 20.px3pt,
+//                 height: 20.px3pt,
+//                 fit: BoxFit.scaleDown,
+//               ),
+//             ),
+//           ),
+//         ),
+//         onChanged: widget.onChangeCallback,
+//         onSubmitted: widget.onChangeCallback,
+//       ),
+//     );
+//   }
+// }

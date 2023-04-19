@@ -5,6 +5,7 @@ import 'package:restaurant/utils/px2dp.dart';
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
+import '../../md3/color_schemes.g.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -47,17 +48,17 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 14.px3pt),
+                    margin: EdgeInsets.only(left: 16.px3pt),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Promotions',
-                          style: TextStyle(
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
                             fontSize: 16.px3pt,
-                            fontWeight: FontWeight.w500,
                             fontFamily: 'PoppinsSemiBold',
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         IconButton(
@@ -78,7 +79,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   Padding(
                     padding: EdgeInsets.only(left: 14.px3pt, right: 14.px3pt),
                     child: SizedBox(
-                      height: 82.px3pt,
+                      height: 96.px3pt,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: 10,
@@ -117,7 +118,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                             fontSize: 16.px3pt,
                             fontWeight: FontWeight.w500,
                             fontFamily: 'PoppinsSemiBold',
-                            color: const Color(0xFF313737),
                           ),
                         ),
                         // TODO: add the click event handler here
@@ -126,7 +126,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                           style: TextStyle(
                             fontSize: 12.px3pt,
                             fontFamily: 'PoppinsRegular',
-                            color: const Color(0xFF313737),
                           ),
                         ),
                       ],
@@ -139,28 +138,35 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
           SliverPersistentHeader(
             pinned: true,
             delegate: _TabLayoutDelegate(
-              TabBar(
-                isScrollable: true,
-                indicatorColor: Colors.transparent,
-                labelColor: const Color(0xFFFF9A51),
-                unselectedLabelColor: const Color(0xFF888B8B),
-                labelStyle: TextStyle(
-                  fontFamily: 'PoppinsMedium',
-                  fontSize: 16.px3pt,
-                  fontWeight: FontWeight.w500,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontFamily: 'PoppinsMedium',
-                  fontSize: 12.px3pt,
-                  fontWeight: FontWeight.w400,
-                ),
-                controller: _tabController,
-                tabs: tabTitles
-                    .map((tabTitle) => Tab(
-                          text: tabTitle,
-                        ))
-                    .toList(),
-              ),
+                TabBar(
+                  isScrollable: true,
+                  indicator: UnderlineTabIndicator(
+                    borderRadius: BorderRadius.circular(4.px3pt),
+                    borderSide: BorderSide(
+                      width: 3.px3pt,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    insets: EdgeInsets.symmetric(horizontal: 16.px3pt),
+                  ),
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  labelStyle: TextStyle(
+                    fontFamily: 'PoppinsMedium',
+                    fontSize: 16.px3pt,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    fontFamily: 'PoppinsMedium',
+                    fontSize: 12.px3pt,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _tabController,
+                  tabs: tabTitles
+                      .map((tabTitle) => Tab(
+                    text: tabTitle,
+                  ))
+                      .toList(),
+                )
             ),
           ),
         ];
@@ -174,7 +180,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   (tabTitle) => ListView.builder(
                     itemCount: 20,
                     itemBuilder: (BuildContext context, int index) {
-                      return CategoriesCard();
+                      return const CategoriesCard();
                     },
                   ),
                 )

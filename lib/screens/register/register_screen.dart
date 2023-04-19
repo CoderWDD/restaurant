@@ -13,14 +13,7 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => UserViewModel(),
-          child: const RegisterScaffold(),
-        ),
-      ],
-    );
+    return const RegisterScaffold();
   }
 }
 
@@ -34,7 +27,7 @@ class RegisterScaffold extends StatefulWidget {
 class _RegisterScaffoldState extends State<RegisterScaffold> {
   var _username = "";
   var _password = "";
-
+  var _phoneNumber = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +100,7 @@ class _RegisterScaffoldState extends State<RegisterScaffold> {
                         margin: EdgeInsets.only(bottom: 16.px3pt),
                         child: InputWidget(
                           labelText: 'Name',
-                          onValueChanged: (value) {},
+                          onValueChanged: (value) {_username = value;},
                           textInputAction: TextInputAction.next,
                         ),
                       ),
@@ -116,7 +109,7 @@ class _RegisterScaffoldState extends State<RegisterScaffold> {
                         child: InputWidget(
                           labelText: 'Phone Number',
                           onValueChanged: (value) {
-                            _username = value;
+                            _phoneNumber = value;
                           },
                           textInputAction: TextInputAction.next,
                         ),
@@ -136,7 +129,7 @@ class _RegisterScaffoldState extends State<RegisterScaffold> {
                         text: 'Register',
                         onPressed: () {
                           Provider.of<UserViewModel>(context, listen: false)
-                              .register(_username, _password);
+                              .register(_username, _password, _phoneNumber);
                         },
                       ),
                     ],

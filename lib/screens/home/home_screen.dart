@@ -2,15 +2,18 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant/screens/home/home_tab.dart';
 import 'package:restaurant/screens/home/like_tab.dart';
 import 'package:restaurant/screens/home/orders_tab.dart';
 import 'package:restaurant/screens/home/person_tab.dart';
 import 'package:restaurant/utils/px2dp.dart';
+import 'package:restaurant/viewmodel/user_view_model.dart';
 
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
+import '../../md3/color_schemes.g.dart';
 import '../menu_drawer/drawer_menu.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -25,10 +28,10 @@ class _MyHomePageState extends State<MyHomePage>{
   int _selectedIndex = 0;
 
   final List<Widget> _children = [
-    HomeTab(),
-    LikeTab(),
-    OrdersScreen(),
-    PersonTab()
+    const HomeTab(),
+    const LikeTab(),
+    const OrdersScreen(),
+    const PersonTab()
   ];
 
   final List<String> _title = [
@@ -51,58 +54,64 @@ class _MyHomePageState extends State<MyHomePage>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const DrawerMenu(),
-      bottomNavigationBar: BottomNavigationBar(
-        fixedColor: const Color(0xFFF69B14),
-        elevation: 12.px3pt,
-        showSelectedLabels: true,
-        currentIndex: _selectedIndex,
-        onTap: onTabTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              homeIllustration,
+    // get the user view model from provider
+    var user = Provider.of<UserViewModel>(context, listen: false).user;
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      home: Scaffold(
+        drawer: DrawerMenu(name: user.username, email: user.email),
+        bottomNavigationBar: BottomNavigationBar(
+          fixedColor: Theme.of(context).colorScheme.primary,
+          elevation: 12.px3pt,
+          showSelectedLabels: true,
+          currentIndex: _selectedIndex,
+          onTap: onTabTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                homeIllustration,
+              ),
+              label: 'Home',
             ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              likeIllustration,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                likeIllustration,
+              ),
+              label: 'Like',
             ),
-            label: 'Like',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              ordersIllustration,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                ordersIllustration,
+              ),
+              label: 'Orders',
             ),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              personIllustration,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                personIllustration,
+              ),
+              label: 'Me',
             ),
-            label: 'Me',
-          ),
-        ],
-      ),
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          _title[_selectedIndex],
-          style: TextStyle(
-              fontFamily: 'PoppinsSemiBold',
-              fontSize: 16.px3pt,
-              fontWeight: FontWeight.w600),
+          ],
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            _title[_selectedIndex],
+            style: TextStyle(
+                fontFamily: 'PoppinsSemiBold',
+                fontSize: 16.px3pt,
+                fontWeight: FontWeight.w600),
           ),
-        ],
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.qr_code),
+            ),
+          ],
+        ),
+        body: _children[_selectedIndex],
       ),
-      body: _children[_selectedIndex],
     );
   }
 }
