@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant/base/base_viewmodel.dart';
 import 'package:restaurant/base/view_state.dart';
 import 'package:restaurant/constants/router_constants.dart';
-import 'package:restaurant/entities/User.dart';
+import 'package:restaurant/entities/user.dart';
 import 'package:restaurant/repository/user_repository.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/viewmodel/auth_view_model.dart';

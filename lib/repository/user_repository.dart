@@ -4,7 +4,7 @@ import 'package:restaurant/base/api_response.dart';
 import 'package:restaurant/base/base_repository.dart';
 import 'package:restaurant/network/RestaurantDio.dart';
 
-import '../entities/User.dart';
+import '../entities/user.dart';
 
 class UserRepository extends BaseRepository{
   Future<ApiResponse<String>> login(User user) async{
