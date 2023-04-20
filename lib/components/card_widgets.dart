@@ -31,6 +31,7 @@ class _PromotionsCardState extends State<PromotionsCard> {
     return Padding(
       padding: EdgeInsets.only(right: 16.px3pt),
       child: Card(
+        color: Theme.of(context).colorScheme.onPrimary,
         elevation: 2.0.px3pt,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.px3pt),
@@ -127,6 +128,8 @@ class CategoriesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16.px3pt, vertical: 8.px3pt),
+      color: Theme.of(context).colorScheme.onPrimary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(13.px3pt),
       ),
@@ -137,7 +140,7 @@ class CategoriesCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(10.px3pt),
+              padding: EdgeInsets.only(right: 4.px3pt),
               child: SizedBox(
                 width: 76.px3pt,
                 height: 76.px3pt,

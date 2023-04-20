@@ -4,10 +4,12 @@ class User {
   final String? email;
   final String password;
   final String username;
+  late String token;
 
   User({
     this.phone,
     this.email,
+    this.token = '',
     required this.password,
     required this.username,
   });

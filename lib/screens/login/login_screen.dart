@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant/utils/px2dp.dart';
+import 'package:restaurant/viewmodel/auth_view_model.dart';
 import 'package:restaurant/viewmodel/user_view_model.dart';
 
+import '../../base/view_state.dart';
 import '../../components/buttons_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
@@ -120,8 +122,15 @@ class _LoginScaffoldState extends State<LoginScaffold> {
                       text: 'Login',
                       onPressed: () {
                         // call login function
-                        Provider.of<UserViewModel>(context, listen: false)
-                            .login(_username, _password);
+                        var userViewModel = Provider.of<UserViewModel>(context, listen: false);
+                        var loginRes = userViewModel.login(_username, _password);
+                        loginRes.then((value) {
+                          if (userViewModel.viewState == ViewState.success) {
+                            // save token to secure storage
+                            var authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                            authViewModel.saveToken(value);
+                          }
+                        });
                       },
                     ),
                   ]),

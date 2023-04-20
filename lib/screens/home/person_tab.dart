@@ -21,6 +21,7 @@ class _PersonTabState extends State<PersonTab> {
       child: Column(
         children: [
           Card(
+            color: Theme.of(context).colorScheme.onPrimary,
             margin: const EdgeInsets.all(16.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -71,6 +72,7 @@ class _PersonTabState extends State<PersonTab> {
             ),
           ),
           Card(
+            color: Theme.of(context).colorScheme.onPrimary,
             margin: const EdgeInsets.all(16.0),
             elevation: 2.0.px3pt,
             child: Column(

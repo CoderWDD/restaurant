@@ -302,6 +302,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 itemBuilder: (context, index) {
                   final order = _orders[index];
                   return Card(
+                    color: Theme.of(context).colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.px3pt),
                     ),

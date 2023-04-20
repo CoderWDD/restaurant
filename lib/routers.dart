@@ -1,7 +1,7 @@
-
 import 'package:go_router/go_router.dart';
 import 'package:restaurant/screens/food_detail/food_details_screen.dart';
 import 'package:restaurant/screens/login/login_screen.dart';
+import 'package:restaurant/screens/qr_code_scan/qr_code_scan_screen.dart';
 import 'package:restaurant/screens/register/register_screen.dart';
 import 'package:restaurant/screens/splash/splash_screen.dart';
 
@@ -19,7 +19,14 @@ final GoRouter routers = GoRouter(
     ),
     GoRoute(
       path: SPLASH_ROUTE,
-      builder: (context, state) => SplashScreen( onLoginPressed: (){ routers.go(LOGIN_ROUTE); }, onRegisterPressed: (){ routers.go(REGISTER_ROUTE); },),
+      builder: (context, state) => SplashScreen(
+        onLoginPressed: () {
+          routers.go(LOGIN_ROUTE);
+        },
+        onRegisterPressed: () {
+          routers.go(REGISTER_ROUTE);
+        },
+      ),
     ),
     GoRoute(
       path: REGISTER_ROUTE,
@@ -32,6 +39,10 @@ final GoRouter routers = GoRouter(
     GoRoute(
       path: FOOD_DETAILS_SCREEN,
       builder: (context, state) => const FoodDetailScreen(),
+    ),
+    GoRoute(
+      path: QR_Code_Scan_Screen,
+      builder: (context, state) => const QRCodeScanScreen(),
     ),
   ],
 );
