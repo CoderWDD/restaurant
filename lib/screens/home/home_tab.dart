@@ -1,10 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
+import '../../constants/router_constants.dart';
+import '../../go_router_data.dart';
 import '../../md3/color_schemes.g.dart';
 
 class HomeTab extends StatefulWidget {
@@ -113,7 +117,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Categories',
+                          'Menu',
                           style: TextStyle(
                             fontSize: 16.px3pt,
                             fontWeight: FontWeight.w500,
@@ -180,7 +184,11 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   (tabTitle) => ListView.builder(
                     itemCount: 20,
                     itemBuilder: (BuildContext context, int index) {
-                      return const CategoriesCard();
+                      return CategoriesCard(
+                        onTap: () {
+                          routers.push(FOOD_DETAILS_SCREEN, extra: const GoRouterData(query: {'id': '1'}));
+                        },
+                      );
                     },
                   ),
                 )
@@ -191,6 +199,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(length: tabTitles.length, vsync: this);
   }
 }
