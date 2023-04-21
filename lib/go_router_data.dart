@@ -1,11 +1,11 @@
 
 class GoRouterData {
-  final Map<String, String> query;
-  final Map<String, String> params;
-  final String location;
-  final String state;
+  Map<String, dynamic> query;
+  Map<String, dynamic> params;
+  String location;
+  String state;
 
-  const GoRouterData({
+  GoRouterData({
     this.query = const {},
     this.params = const {},
     this.location = '',
@@ -13,8 +13,8 @@ class GoRouterData {
   });
 
   GoRouterData copyWith({
-    Map<String, String>? query,
-    Map<String, String>? params,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? params,
     String? location,
     String? state,
   }) {

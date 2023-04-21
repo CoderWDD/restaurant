@@ -6,6 +6,8 @@ import 'package:restaurant/screens/register/register_screen.dart';
 import 'package:restaurant/screens/splash/splash_screen.dart';
 
 import 'constants/router_constants.dart';
+import 'entities/dish.dart';
+import 'go_router_data.dart';
 import 'screens/home/home_screen.dart';
 
 /// The route configuration.
@@ -38,7 +40,13 @@ final GoRouter routers = GoRouter(
     ),
     GoRoute(
       path: FOOD_DETAILS_SCREEN,
-      builder: (context, state) => const FoodDetailScreen(),
+      name: FOOD_DETAILS_SCREEN,
+      builder: (context, state) {
+        final data = state.extra as GoRouterData;
+        return FoodDetailScreen(
+          dish: Dish.fromJson(data.query),
+        );
+      },
     ),
     GoRoute(
       path: QR_Code_Scan_Screen,

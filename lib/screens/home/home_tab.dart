@@ -1,15 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant/base/view_state.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
-
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
 import '../../constants/router_constants.dart';
 import '../../go_router_data.dart';
-import '../../md3/color_schemes.g.dart';
+import '../../viewmodel/home_dish_list_view_model.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -19,17 +19,6 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  static List<String> tabTitles = [
-    'Burger',
-    'Burger',
-    'Burger',
-    'Burger',
-    'Burger',
-    'Burger',
-    'Burger'
-  ];
-
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
@@ -59,11 +48,12 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                       children: [
                         Text(
                           'Promotions',
-                          style: Theme.of(context).textTheme.headline6?.copyWith(
-                            fontSize: 16.px3pt,
-                            fontFamily: 'PoppinsSemiBold',
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontSize: 16.px3pt,
+                                    fontFamily: 'PoppinsSemiBold',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                         ),
                         IconButton(
                           // TODO: slide to the right of promotions list
@@ -104,126 +94,117 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 31.px3pt,
-              margin: EdgeInsets.only(top: 22.px3pt),
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 14.px3pt, right: 14.px3pt),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Menu',
-                          style: TextStyle(
-                            fontSize: 16.px3pt,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'PoppinsSemiBold',
-                          ),
-                        ),
-                        // TODO: add the click event handler here
-                        Text(
-                          'See More',
-                          style: TextStyle(
-                            fontSize: 12.px3pt,
-                            fontFamily: 'PoppinsRegular',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SliverPersistentHeader(
+          SliverAppBar(
+            automaticallyImplyLeading: false,
             pinned: true,
-            delegate: _TabLayoutDelegate(
-                TabBar(
-                  isScrollable: true,
-                  indicator: UnderlineTabIndicator(
-                    borderRadius: BorderRadius.circular(4.px3pt),
-                    borderSide: BorderSide(
-                      width: 3.px3pt,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    insets: EdgeInsets.symmetric(horizontal: 16.px3pt),
-                  ),
-                  labelColor: Theme.of(context).colorScheme.primary,
-                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                  labelStyle: TextStyle(
-                    fontFamily: 'PoppinsMedium',
-                    fontSize: 16.px3pt,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  unselectedLabelStyle: TextStyle(
-                    fontFamily: 'PoppinsMedium',
-                    fontSize: 12.px3pt,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _tabController,
-                  tabs: tabTitles
-                      .map((tabTitle) => Tab(
-                    text: tabTitle,
-                  ))
-                      .toList(),
-                )
+            floating: true,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            elevation: 0,
+            expandedHeight: 0,
+            title: Text(
+              'Menu',
+              style: TextStyle(
+                fontSize: 16.px3pt,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'PoppinsSemiBold',
+              ),
             ),
           ),
         ];
       },
-      body: DefaultTabController(
-        length: tabTitles.length,
-        child: TabBarView(
-            controller: _tabController,
-            children: tabTitles
-                .map(
-                  (tabTitle) => ListView.builder(
-                    itemCount: 20,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CategoriesCard(
-                        onTap: () {
-                          routers.push(FOOD_DETAILS_SCREEN, extra: const GoRouterData(query: {'id': '1'}));
-                        },
-                      );
-                    },
-                  ),
-                )
-                .toList()),
-      ),
+      body: const DishListComponent(),
     );
   }
+}
+
+class DishListComponent extends StatefulWidget {
+  const DishListComponent({super.key});
+
+  @override
+  State<DishListComponent> createState() => _DishListComponentState();
+}
+
+class _DishListComponentState extends State<DishListComponent> {
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: tabTitles.length, vsync: this);
+    _scrollController.addListener(_onScroll);
+    Future.microtask(() => firstLoad());
   }
-}
 
-class _TabLayoutDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
-
-  _TabLayoutDelegate(this.tabBar);
+  void firstLoad(){
+    final provider = Provider.of<HomeDishListProvider>(context, listen: false);
+    provider.getNextDishList();
+  }
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      child: tabBar,
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async{
+    final provider = Provider.of<HomeDishListProvider>(context, listen: false);
+    await provider.getNextDishList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<HomeDishListProvider>(
+      builder: (context, provider, child) {
+        // if the state of the provider is loading, show a circular progress indicator
+        if (provider.viewState == ViewState.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        // if the state of the provider is error, show an error message
+        if (provider.viewState == ViewState.error) {
+          return const Center(
+            child: Text('Failed to fetch dishes data.'),
+          );
+        }
+
+        return RefreshIndicator(
+          triggerMode: RefreshIndicatorTriggerMode.anywhere,
+          onRefresh: _loadMore,
+          child: ListView.builder(
+            itemCount: provider.dishList.length + (provider.hasMoreData ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index == provider.dishList.length) {
+                return provider.viewState == ViewState.loading
+                    ? const CircularProgressIndicator()
+                    : const SizedBox();
+              } else {
+                final dish = provider.dishList[index];
+                dish.toJson();
+                return DishCard(
+                  onTap: () {
+                    routers.push(FOOD_DETAILS_SCREEN, extra: GoRouterData(query: dish.toJson()));
+                  },
+                  title: dish.name,
+                  description: dish.description,
+                  price: dish.price.toString(),
+                  url: dish.image,
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
-
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
-
-  @override
-  double get minExtent => tabBar.preferredSize.height;
-
-  @override
-  bool shouldRebuild(_TabLayoutDelegate oldDelegate) => false;
 }
+
+

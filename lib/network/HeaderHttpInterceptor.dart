@@ -12,7 +12,7 @@ class HeaderHttpInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     // add the authorization header if the user is logged in
     if (!options.path.contains('login') && !options.path.contains('register')){
-      options.headers['Authorization'] = 'Bearer ${AuthViewModel.token}';
+      options.headers['token'] = AuthViewModel.token;
     }
     handler.next(options);
   }

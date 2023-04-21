@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
 import '../md3/color_schemes.g.dart';
@@ -107,16 +109,15 @@ class _PromotionsCardState extends State<PromotionsCard> {
 
 }
 
-class CategoriesCard extends StatelessWidget {
+class DishCard extends StatelessWidget {
   final VoidCallback? onTap;
   final String? title;
   final String? description;
   final String? price;
   final String? url;
-  final String defaultImageUrl =
-      'https://docs.flutter.dev/assets/images/docs/ui/layout/layout-4.png';
+  final String defaultImageUrl = 'https://docs.flutter.dev/assets/images/docs/ui/layout/layout-4.png';
 
-  const CategoriesCard({
+  const DishCard({
     Key? key,
     this.onTap,
     this.title,

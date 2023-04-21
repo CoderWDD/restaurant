@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant/viewmodel/auth_view_model.dart';
+import 'package:restaurant/viewmodel/food_details_provider.dart';
+import 'package:restaurant/viewmodel/home_dish_list_view_model.dart';
+import 'package:restaurant/viewmodel/order_view_model.dart';
 import 'package:restaurant/viewmodel/user_view_model.dart';
 
 import 'md3/color_schemes.g.dart';
@@ -18,6 +21,9 @@ void main() {
             // user view model
             ChangeNotifierProvider(create: (_) => UserViewModel()),
             ChangeNotifierProvider(create: (_) => AuthViewModel()),
+            ChangeNotifierProvider(create: (_) => OrderViewModel()),
+            ChangeNotifierProvider(create: (_) => HomeDishListProvider()),
+            ChangeNotifierProvider(create: (_) => FoodDetailsProvider()),
           ],
           child: const MyApp(),
         ),
