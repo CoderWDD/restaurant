@@ -162,7 +162,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   ElevatedButton(
                     onPressed: () {
                       // Add the item to the cart
-                      _showAddToCartDialog();
+                      _showAddToCartDialog(provider);
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.onSecondary,
@@ -199,7 +199,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     });
   }
 
-  void _showAddToCartDialog() async {
+  void _showAddToCartDialog(FoodDetailsProvider provider) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -207,7 +207,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
           onAddToCart: (String flavor, int quantity) {
             // Handle adding the item to the cart
             var order = Order(number: quantity, dishFlavor: flavor, dishId: widget.dish.id);
-            Provider.of<FoodDetailsProvider>(context).addToCart(order);
+            provider.addToCart(order);
           },
         );
       },

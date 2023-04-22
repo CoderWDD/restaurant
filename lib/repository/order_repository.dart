@@ -38,6 +38,20 @@ class OrderRepository extends BaseRepository{
     return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
   }
 
+  // get the served cart list
+  Future<ApiResponse<ApiResponseData<CartItem>>> getServedCartList({int page = 1, int size = 10}) async{
+    // get the cart list
+    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size/1", );
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
+  }
+
+  // get the un served cart list
+  Future<ApiResponse<ApiResponseData<CartItem>>> getUnServedCartList({int page = 1, int size = 10}) async{
+    // get the cart list
+    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size/0", );
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
+  }
+
   // get the unpaid order list
   Future<ApiResponse<List<Order>>> getUnpaidOrderList({int page = 1, int size = 10}) async{
     // get the unpaid order list

@@ -1,6 +1,14 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant/constants/assets_constants.dart';
 import 'package:restaurant/utils/px2dp.dart';
+
+import '../../base/view_state.dart';
+import '../../entities/cart.dart';
+import '../../viewmodel/all_cart_List_provider.dart';
+import '../../viewmodel/served_cart_list_provider.dart';
+import '../../viewmodel/unserved_cart_list_provider.dart';
 
 class OrdersTab extends StatefulWidget {
   const OrdersTab({Key? key}) : super(key: key);
@@ -9,12 +17,490 @@ class OrdersTab extends StatefulWidget {
   State<OrdersTab> createState() => _OrdersTabState();
 }
 
-class _OrdersTabState extends State<OrdersTab> {
+class _OrdersTabState extends State<OrdersTab>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  static List<String> tabTitles = ['All', 'Served', 'UnServed'];
+
+  final List<Widget> _children = [
+    const AllCartItemListComponent(),
+    const ServedCartItemListComponent(),
+    const UnServedCartItemListComponent(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: tabTitles.length, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _TabLayoutDelegate(
+              TabBar(
+                dragStartBehavior: DragStartBehavior.start,
+                isScrollable: true,
+                indicator: UnderlineTabIndicator(
+                  borderRadius: BorderRadius.circular(4.px3pt),
+                  borderSide: BorderSide(
+                    width: 3.px3pt,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  insets: EdgeInsets.symmetric(horizontal: 16.px3pt),
+                ),
+                labelColor: Theme.of(context).colorScheme.primary,
+                unselectedLabelColor:
+                    Theme.of(context).colorScheme.onSurfaceVariant,
+                labelStyle: TextStyle(
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 16.px3pt,
+                  fontWeight: FontWeight.w500,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 12.px3pt,
+                  fontWeight: FontWeight.w400,
+                ),
+                controller: _tabController,
+                tabs: tabTitles
+                    .map((tabTitle) => Tab(
+                          text: tabTitle,
+                        ))
+                    .toList(),
+              ),
+            ),
+          ),
+        ];
+      },
+      body: DefaultTabController(
+        length: tabTitles.length,
+        child: TabBarView(
+          controller: _tabController,
+          children: _children,
+        ),
+      ),
+    );
+
+    return Stack(
+      children: [
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: Container(
+            padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
+            color: Theme.of(context).colorScheme.onPrimary,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+              child: Text(
+                'Pay',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.px3pt,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'PoppinsSemiBold',
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
+
+class _TabLayoutDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+
+  _TabLayoutDelegate(this.tabBar);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  bool shouldRebuild(_TabLayoutDelegate oldDelegate) => false;
+}
+
+class AllCartItemListComponent extends StatefulWidget {
+  const AllCartItemListComponent({Key? key}) : super(key: key);
+
+  @override
+  State<AllCartItemListComponent> createState() =>
+      _AllCartItemListComponentState();
+}
+
+class _AllCartItemListComponentState extends State<AllCartItemListComponent> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    Future.microtask(() => firstLoad());
+  }
+
+  void firstLoad(){
+    final provider = Provider.of<AllCartListProvider>(context, listen: false);
+    provider.getCartList();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async{
+    final provider = Provider.of<AllCartListProvider>(context, listen: false);
+    await provider.getCartList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AllCartListProvider>(builder: (context, provider, _) {
+      // if the state of the provider is loading, show a circular progress indicator
+      if (provider.viewState == ViewState.loading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      // if the state of the provider is error, show an error message
+      if (provider.viewState == ViewState.error) {
+        return const Center(
+          child: Text('Failed to fetch cart data.'),
+        );
+      }
+
+      return Stack(
+        children: [
+          RefreshIndicator(
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: _loadMore,
+            child: ListView.builder(
+              itemCount: provider.cartList.length + (provider.hasMoreData ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == provider.cartList.length) {
+                  return provider.viewState == ViewState.loading
+                      ? const CircularProgressIndicator()
+                      : const SizedBox();
+                } else {
+                  return CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: provider.cartList[index],);
+                }
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
+              color: Theme.of(context).colorScheme.onPrimary,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+                child: Text(
+                  'Pay',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.px3pt,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'PoppinsSemiBold',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class ServedCartItemListComponent extends StatefulWidget {
+  const ServedCartItemListComponent({Key? key}) : super(key: key);
+
+  @override
+  State<ServedCartItemListComponent> createState() =>
+      _ServedCartItemListComponentState();
+}
+
+class _ServedCartItemListComponentState
+    extends State<ServedCartItemListComponent> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    Future.microtask(() => firstLoad());
+  }
+
+  void firstLoad(){
+    final provider = Provider.of<ServeCartListProvider>(context, listen: false);
+    provider.getServedCartList();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async{
+    final provider = Provider.of<ServeCartListProvider>(context, listen: false);
+    await provider.getServedCartList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ServeCartListProvider>(builder: (context, provider, _) {
+      // if the state of the provider is loading, show a circular progress indicator
+      if (provider.viewState == ViewState.loading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      // if the state of the provider is error, show an error message
+      if (provider.viewState == ViewState.error) {
+        return const Center(
+          child: Text('Failed to fetch cart data.'),
+        );
+      }
+
+      return Stack(
+        children: [
+          RefreshIndicator(
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: _loadMore,
+            child: ListView.builder(
+              itemCount: provider.cartList.length + (provider.hasMoreData ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == provider.cartList.length) {
+                  return provider.viewState == ViewState.loading
+                      ? const CircularProgressIndicator()
+                      : const SizedBox();
+                } else {
+                  return CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: provider.cartList[index],);
+                }
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
+              color: Theme.of(context).colorScheme.onPrimary,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+                child: Text(
+                  'Pay',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.px3pt,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'PoppinsSemiBold',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class UnServedCartItemListComponent extends StatefulWidget {
+  const UnServedCartItemListComponent({Key? key}) : super(key: key);
+
+  @override
+  State<UnServedCartItemListComponent> createState() =>
+      _UnServedCartItemListComponentState();
+}
+
+class _UnServedCartItemListComponentState
+    extends State<UnServedCartItemListComponent> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    Future.microtask(() => firstLoad());
+  }
+
+  void firstLoad(){
+    final provider = Provider.of<UnServeCartListProvider>(context, listen: false);
+    provider.getUnServedCartList();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async{
+    final provider = Provider.of<UnServeCartListProvider>(context, listen: false);
+    await provider.getUnServedCartList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<UnServeCartListProvider>(builder: (context, provider, _) {
+      // if the state of the provider is loading, show a circular progress indicator
+      if (provider.viewState == ViewState.loading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      // if the state of the provider is error, show an error message
+      if (provider.viewState == ViewState.error) {
+        return const Center(
+          child: Text('Failed to fetch cart data.'),
+        );
+      }
+
+      return Stack(
+        children: [
+          RefreshIndicator(
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: _loadMore,
+            child: ListView.builder(
+              itemCount: provider.cartList.length + (provider.hasMoreData ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == provider.cartList.length) {
+                  return provider.viewState == ViewState.loading
+                      ? const CircularProgressIndicator()
+                      : const SizedBox();
+                } else {
+                  return CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: provider.cartList[index],);
+                }
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
+              color: Theme.of(context).colorScheme.onPrimary,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+                child: Text(
+                  'Pay',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.px3pt,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'PoppinsSemiBold',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class CartItemComponent extends StatefulWidget {
+  final bool isSelect;
+  final ValueChanged<bool?>? onSelect;
+  final CartItem cartItem;
+  const CartItemComponent({Key? key, required this.onSelect, required this.isSelect, required this.cartItem}) : super(key: key);
+
+  @override
+  State<CartItemComponent> createState() => _CartItemComponentState();
+}
+
+class _CartItemComponentState extends State<CartItemComponent> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Checkbox(
+        value: widget.isSelect,
+        onChanged: widget.onSelect,
+      ),
+      title: Text(
+        widget.cartItem.name,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      subtitle: Text(widget.cartItem.dishFlavor),
+      trailing: Text(
+        '\$${widget.cartItem.amount}',
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+
+
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
@@ -286,7 +772,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
     });
   }
 
-  final String tempUrl = 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg';
+  final String tempUrl =
+      'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +792,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.px3pt),
                     ),
-                    margin: EdgeInsets.symmetric(horizontal: 16.px3pt, vertical: 8.px3pt),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: 16.px3pt, vertical: 8.px3pt),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -329,7 +817,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             color: Color(0xFF6750A4),
                           ),
                           checkColor: const Color(0xFF6750A4),
-                          fillColor: MaterialStateProperty.resolveWith((states) {
+                          fillColor:
+                              MaterialStateProperty.resolveWith((states) {
                             if (states.contains(MaterialState.disabled)) {
                               return Colors.grey.shade400;
                             }
@@ -368,7 +857,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     fontSize: 14.px3pt,
                                     height: 1.5,
                                     fontFamily: 'PoppinsRegular',
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                               const SizedBox(height: 8),
@@ -384,16 +874,22 @@ class _OrdersScreenState extends State<OrdersScreen> {
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(16.px3pt), topRight: Radius.circular(16.px3pt)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.px3pt),
+                    topRight: Radius.circular(16.px3pt)),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.16),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.16),
                     blurRadius: 16.px3pt,
                     offset: Offset(0, 4.px3pt),
                   ),
                 ],
               ),
-              padding: EdgeInsets.symmetric(horizontal: 16.px3pt, vertical: 4.px3pt),
+              padding:
+                  EdgeInsets.symmetric(horizontal: 16.px3pt, vertical: 4.px3pt),
               child: Row(
                 children: [
                   Checkbox(
@@ -408,7 +904,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         _getTotalPrice();
                       });
                     },
-                    fillColor: MaterialStateColor.resolveWith((states) => Theme.of(context).colorScheme.primary),
+                    fillColor: MaterialStateColor.resolveWith(
+                        (states) => Theme.of(context).colorScheme.primary),
                   ),
                   const Text(
                     'Select All',
@@ -440,7 +937,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onPrimary, backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Theme.of(context).colorScheme.primary,
               ),
               child: Text(
                 'Pay',
@@ -512,7 +1010,6 @@ class Order {
     required this.quantity,
   });
 }
-
 
 class OrderItem {
   final String id;

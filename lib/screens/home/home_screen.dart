@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _children = [
     const HomeTab(),
     const LikeTab(),
-    const OrdersScreen(),
+    const OrdersTab(),
     const PersonTab()
   ];
 
