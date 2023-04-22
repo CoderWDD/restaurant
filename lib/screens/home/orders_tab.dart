@@ -20,7 +20,7 @@ class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
 
   @override
-  _OrdersScreenState createState() => _OrdersScreenState();
+  State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
@@ -286,8 +286,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     });
   }
 
-  final String tempUrl =
-      'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg';
+  final String tempUrl = 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg';
 
   @override
   Widget build(BuildContext context) {

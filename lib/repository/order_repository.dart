@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:restaurant/base/base_repository.dart';
+import 'package:restaurant/entities/cart.dart';
 import 'package:restaurant/entities/category.dart';
 import 'package:restaurant/entities/pageable.dart';
 import 'package:restaurant/network/RestaurantDio.dart';
@@ -31,10 +32,10 @@ class OrderRepository extends BaseRepository{
   }
 
   // get the cart list
-  Future<ApiResponse<List<Order>>> getCartList({int page = 1, int size = 10}) async{
+  Future<ApiResponse<ApiResponseData<CartItem>>> getCartList({int page = 1, int size = 10}) async{
     // get the cart list
     final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size", );
-    return ApiResponse.fromJson(res.data, (data) => data.map<Order>((item) => Order.fromJson(item)).toList());
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
   }
 
   // get the unpaid order list
