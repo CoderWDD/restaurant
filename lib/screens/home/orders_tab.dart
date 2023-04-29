@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant/constants/assets_constants.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
 import '../../base/view_state.dart';

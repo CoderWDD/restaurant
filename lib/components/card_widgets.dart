@@ -84,6 +84,8 @@ class _PromotionsCardState extends State<PromotionsCard> {
                           color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
                           fontWeight: FontWeight.normal,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 2.px3pt),
                       Text(
@@ -94,6 +96,8 @@ class _PromotionsCardState extends State<PromotionsCard> {
                           fontWeight: FontWeight.w500,
                           fontFamily: 'PoppinsMedium',
                         ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),

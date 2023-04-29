@@ -10,7 +10,7 @@ import '../network/RestaurantDio.dart';
 class RestaurantRepository extends BaseRepository{
   // get the recommended restaurant list
   Future<ApiResponse<ApiResponseData<Canteen>>> getRecommendedRestaurantList({int size = 10}) async{
-    final res = await RestaurantDio().dio.get("/restaurant/recommend/$size");
+    final res = await RestaurantDio().dio.get("/store/$size");
     return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => Canteen.fromJson(e)).toList()));
   }
 }

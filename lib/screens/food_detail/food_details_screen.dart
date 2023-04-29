@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
 import 'package:restaurant/viewmodel/food_details_provider.dart';
+import 'package:restaurant/viewmodel/home_favorite_list_provider.dart';
 
 import '../../components/add_to_cart_dialog.dart';
 import '../../components/card_widgets.dart';
@@ -20,7 +21,7 @@ class FoodDetailScreen extends StatefulWidget {
 class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<FoodDetailsProvider>(builder: (context, provider, _){
+    return Consumer2<FoodDetailsProvider, HomeFavoriteProvider>(builder: (context, foodDetailsProvider, homeFavoriteProvider, _){
       return Scaffold(
           body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -35,9 +36,14 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   ),
                   actions: [
                     IconButton(
-                      icon: const Icon(Icons.favorite_border),
+                      icon: homeFavoriteProvider.hasFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
                       onPressed: () {
                         // handle favorite button press
+                        if (homeFavoriteProvider.hasFavorite){
+                          homeFavoriteProvider.deleteFavorite(widget.dish.id);
+                        }else{
+                          homeFavoriteProvider.addFavorite(widget.dish.id);
+                        }
                       },
                     ),
                   ],
@@ -162,7 +168,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   ElevatedButton(
                     onPressed: () {
                       // Add the item to the cart
-                      _showAddToCartDialog(provider);
+                      _showAddToCartDialog(foodDetailsProvider);
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.onSecondary,

@@ -30,7 +30,6 @@ class OrderRepository extends BaseRepository{
     final res = await RestaurantDio().dio.get("/shoppingCart", queryParameters: order.toJson());
     return ApiResponse.fromJson(res.data, (data) => data.toString());
   }
-
   // get the cart list
   Future<ApiResponse<ApiResponseData<CartItem>>> getCartList({int page = 1, int size = 10}) async{
     // get the cart list

@@ -168,6 +168,7 @@ class _RestaurantListComponentState extends State<RestaurantListComponent> {
           triggerMode: RefreshIndicatorTriggerMode.anywhere,
           onRefresh: _loadMore,
           child: ListView.builder(
+            scrollDirection: Axis.horizontal,
             itemCount: provider.canteenList.length + (provider.hasMoreData ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == provider.canteenList.length) {
