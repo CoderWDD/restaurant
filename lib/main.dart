@@ -6,6 +6,7 @@ import 'package:restaurant/viewmodel/all_cart_List_provider.dart';
 import 'package:restaurant/viewmodel/auth_view_model.dart';
 import 'package:restaurant/viewmodel/food_details_provider.dart';
 import 'package:restaurant/viewmodel/home_dish_list_view_model.dart';
+import 'package:restaurant/viewmodel/home_restaurant_list_provider.dart';
 import 'package:restaurant/viewmodel/order_view_model.dart';
 import 'package:restaurant/viewmodel/served_cart_list_provider.dart';
 import 'package:restaurant/viewmodel/unserved_cart_list_provider.dart';
@@ -26,6 +27,7 @@ void main() {
             ChangeNotifierProvider(create: (_) => AuthViewModel()),
             ChangeNotifierProvider(create: (_) => OrderViewModel()),
             ChangeNotifierProvider(create: (_) => HomeDishListProvider()),
+            ChangeNotifierProvider(create: (_) => HomeRestaurantListProvider()),
             ChangeNotifierProvider(create: (_) => FoodDetailsProvider()),
             ChangeNotifierProvider(create: (_) => AllCartListProvider()),
             ChangeNotifierProvider(create: (_) => ServeCartListProvider()),

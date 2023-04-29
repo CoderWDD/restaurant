@@ -9,14 +9,14 @@ class PromotionsCard extends StatefulWidget {
   final String? url;
   final String title;
   final String description;
-  final String price;
+  final String address;
   final VoidCallback? onTap;
 
   const PromotionsCard(
       {Key? key,
       required this.title,
       required this.description,
-      required this.price,
+      required this.address,
       this.url,
       required this.onTap})
       : super(key: key);
@@ -87,7 +87,7 @@ class _PromotionsCardState extends State<PromotionsCard> {
                       ),
                       SizedBox(height: 2.px3pt),
                       Text(
-                        widget.price,
+                        widget.address,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontSize: 14.px3pt,
                           color: Theme.of(context).colorScheme.primary.withOpacity(0.6),

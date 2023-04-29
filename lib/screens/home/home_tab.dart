@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant/base/view_state.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
+import 'package:restaurant/viewmodel/home_restaurant_list_provider.dart';
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
@@ -69,25 +70,11 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   // TODO: add a listview.builder here
-
                   Padding(
                     padding: EdgeInsets.only(left: 14.px3pt, right: 14.px3pt),
                     child: SizedBox(
                       height: 96.px3pt,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 10,
-                        itemBuilder: (BuildContext context, int index) {
-                          return PromotionsCard(
-                            url:
-                                'https://docs.flutter.dev/assets/images/docs/ui/layout/layout-4.png',
-                            title: 'Hello',
-                            description: 'ssss',
-                            price: "\$123.9",
-                            onTap: () {},
-                          );
-                        },
-                      ),
+                      child: const RestaurantListComponent(),
                     ),
                   )
                 ],
@@ -116,6 +103,91 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 }
+
+
+class RestaurantListComponent extends StatefulWidget {
+  const RestaurantListComponent({Key? key}) : super(key: key);
+
+  @override
+  State<RestaurantListComponent> createState() => _RestaurantListComponentState();
+}
+
+class _RestaurantListComponentState extends State<RestaurantListComponent> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    Future.microtask(() => firstLoad());
+  }
+
+  void firstLoad(){
+    final provider = Provider.of<HomeRestaurantListProvider>(context, listen: false);
+    provider.getNextCanteenList();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadMore() async{
+    final provider = Provider.of<HomeRestaurantListProvider>(context, listen: false);
+    await provider.getNextCanteenList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<HomeRestaurantListProvider>(
+      builder: (context, provider, child) {
+        // if the state of the provider is loading, show a circular progress indicator
+        if (provider.viewState == ViewState.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        // if the state of the provider is error, show an error message
+        if (provider.viewState == ViewState.error) {
+          return const Center(
+            child: Text('Failed to fetch dishes data.'),
+          );
+        }
+
+        return RefreshIndicator(
+          triggerMode: RefreshIndicatorTriggerMode.anywhere,
+          onRefresh: _loadMore,
+          child: ListView.builder(
+            itemCount: provider.canteenList.length + (provider.hasMoreData ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index == provider.canteenList.length) {
+                return provider.viewState == ViewState.loading
+                    ? const CircularProgressIndicator()
+                    : const SizedBox();
+              } else {
+                final canteen = provider.canteenList[index];
+                return PromotionsCard(title: canteen.name, description: canteen.description, address: canteen.address, onTap: (){
+                  // todo switch to the restaurant page
+                });
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
 
 class DishListComponent extends StatefulWidget {
   const DishListComponent({super.key});
@@ -190,6 +262,7 @@ class _DishListComponentState extends State<DishListComponent> {
                 final dish = provider.dishList[index];
                 dish.toJson();
                 return DishCard(
+                  key: Key(dish.id.toString()),
                   onTap: () {
                     routers.push(FOOD_DETAILS_SCREEN, extra: GoRouterData(query: dish.toJson()));
                   },
