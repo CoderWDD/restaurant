@@ -1,9 +1,11 @@
+import 'dart:ffi';
+
 import '../base/base_viewmodel.dart';
 import '../base/view_state.dart';
 import '../entities/cart.dart';
 import '../repository/order_repository.dart';
 
-class UnServeCartListProvider extends BaseViewModel<OrderRepository> {
+class UnServeCartListProvider extends BaseViewModel<OrderRepository, Void> {
   @override
   OrderRepository createRepository() => OrderRepository();
   List<CartItem> cartList = [];
@@ -12,7 +14,8 @@ class UnServeCartListProvider extends BaseViewModel<OrderRepository> {
   bool hasMoreData = true;
 
   // get the cart list, and ignore weather the cart item is paid or not
-  Future<void> getUnServedCartList() async {
+  @override
+  Future<void> getDataList() async {
     setViewState(ViewState.loading);
     // get the cart list
     final res = await repository.getUnServedCartList(page: currentPage, size: pageSize);

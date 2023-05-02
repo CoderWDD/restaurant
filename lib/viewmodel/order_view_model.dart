@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:restaurant/base/base_viewmodel.dart';
 import 'package:restaurant/entities/cart.dart';
 import 'package:restaurant/entities/category.dart';
@@ -7,7 +9,7 @@ import 'package:restaurant/repository/order_repository.dart';
 
 import '../base/view_state.dart';
 
-class OrderViewModel extends BaseViewModel<OrderRepository>{
+class OrderViewModel extends BaseViewModel<OrderRepository, Void>{
   @override
   OrderRepository createRepository() => OrderRepository();
   // get the category list by canteen
@@ -32,5 +34,11 @@ class OrderViewModel extends BaseViewModel<OrderRepository>{
       return res.data;
     }
     return null;
+  }
+
+  @override
+  Future<void> getDataList() {
+    // TODO: implement getDataList
+    throw UnimplementedError();
   }
 }

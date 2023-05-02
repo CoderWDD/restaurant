@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant/base/view_state.dart';
+import 'package:restaurant/components/refresh_list_component.dart';
+import 'package:restaurant/entities/canteen.dart';
+import 'package:restaurant/entities/dish.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
 import 'package:restaurant/viewmodel/home_restaurant_list_provider.dart';
@@ -104,83 +107,28 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   }
 }
 
-
 class RestaurantListComponent extends StatefulWidget {
   const RestaurantListComponent({Key? key}) : super(key: key);
 
   @override
-  State<RestaurantListComponent> createState() => _RestaurantListComponentState();
+  State<RestaurantListComponent> createState() =>
+      _RestaurantListComponentState();
 }
 
 class _RestaurantListComponentState extends State<RestaurantListComponent> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    Future.microtask(() => firstLoad());
-  }
-
-  void firstLoad(){
-    final provider = Provider.of<HomeRestaurantListProvider>(context, listen: false);
-    provider.getNextCanteenList();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.offset >=
-        _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      _loadMore();
-    }
-  }
-
-  Future<void> _loadMore() async{
-    final provider = Provider.of<HomeRestaurantListProvider>(context, listen: false);
-    await provider.getNextCanteenList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeRestaurantListProvider>(
       builder: (context, provider, child) {
-        // if the state of the provider is loading, show a circular progress indicator
-        if (provider.viewState == ViewState.loading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        // if the state of the provider is error, show an error message
-        if (provider.viewState == ViewState.error) {
-          return const Center(
-            child: Text('Failed to fetch dishes data.'),
-          );
-        }
-
-        return RefreshIndicator(
-          triggerMode: RefreshIndicatorTriggerMode.anywhere,
-          onRefresh: _loadMore,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: provider.canteenList.length + (provider.hasMoreData ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == provider.canteenList.length) {
-                return provider.viewState == ViewState.loading
-                    ? const CircularProgressIndicator()
-                    : const SizedBox();
-              } else {
-                final canteen = provider.canteenList[index];
-                return PromotionsCard(title: canteen.name, description: canteen.description, address: canteen.address, onTap: (){
-                  // todo switch to the restaurant page
-                });
-              }
+        return RefreshListComponent<HomeRestaurantListProvider>(
+          provider: provider,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (item) => PromotionsCard(
+            title: (item as Canteen).name,
+            description: item.description,
+            address: item.address,
+            onTap: () {
+              // todo switch to the restaurant page
             },
           ),
         );
@@ -188,7 +136,6 @@ class _RestaurantListComponentState extends State<RestaurantListComponent> {
     );
   }
 }
-
 
 class DishListComponent extends StatefulWidget {
   const DishListComponent({super.key});
@@ -198,87 +145,27 @@ class DishListComponent extends StatefulWidget {
 }
 
 class _DishListComponentState extends State<DishListComponent> {
-  final _scrollController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    Future.microtask(() => firstLoad());
-  }
-
-  void firstLoad(){
-    final provider = Provider.of<HomeDishListProvider>(context, listen: false);
-    provider.getNextDishList();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      _loadMore();
-    }
-  }
-
-  Future<void> _loadMore() async{
-    final provider = Provider.of<HomeDishListProvider>(context, listen: false);
-    await provider.getNextDishList();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeDishListProvider>(
       builder: (context, provider, child) {
-        // if the state of the provider is loading, show a circular progress indicator
-        if (provider.viewState == ViewState.loading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        // if the state of the provider is error, show an error message
-        if (provider.viewState == ViewState.error) {
-          return const Center(
-            child: Text('Failed to fetch dishes data.'),
-          );
-        }
-
-        return RefreshIndicator(
-          triggerMode: RefreshIndicatorTriggerMode.anywhere,
-          onRefresh: _loadMore,
-          child: ListView.builder(
-            itemCount: provider.dishList.length + (provider.hasMoreData ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == provider.dishList.length) {
-                return provider.viewState == ViewState.loading
-                    ? const CircularProgressIndicator()
-                    : const SizedBox();
-              } else {
-                final dish = provider.dishList[index];
-                dish.toJson();
-                return DishCard(
-                  key: Key(dish.id.toString()),
-                  onTap: () {
-                    routers.push(FOOD_DETAILS_SCREEN, extra: GoRouterData(query: dish.toJson()));
-                  },
-                  title: dish.name,
-                  description: dish.description,
-                  price: dish.price.toString(),
-                  url: dish.image,
-                );
-              }
+        return RefreshListComponent<HomeDishListProvider>(
+          provider: provider,
+          itemBuilder: (item) => DishCard(
+            key: Key((item as Dish).id.toString()),
+            onTap: () {
+              routers.push(FOOD_DETAILS_SCREEN,
+                  extra: GoRouterData(query: item.toJson()));
             },
+            title: item.name,
+            description: item.description,
+            price: item.price.toString(),
+            url: item.image,
           ),
         );
       },
     );
   }
 }
-
-

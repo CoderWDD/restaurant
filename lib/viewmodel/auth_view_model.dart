@@ -1,8 +1,10 @@
 
+import 'dart:ffi';
+
 import 'package:restaurant/base/base_viewmodel.dart';
 import 'package:restaurant/repository/auth_repository.dart';
 
-class AuthViewModel extends BaseViewModel<AuthRepository>{
+class AuthViewModel extends BaseViewModel<AuthRepository, Void>{
   static String token = '';
 
   @override
@@ -23,4 +25,7 @@ class AuthViewModel extends BaseViewModel<AuthRepository>{
 
   // delete auth key from secure storage
   Future<void> deleteToken() => repository.deleteToken();
+
+  @override
+  Future<void> getDataList() async {}
 }

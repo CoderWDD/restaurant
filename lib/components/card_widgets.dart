@@ -178,6 +178,8 @@ class DishCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.normal,
                       ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

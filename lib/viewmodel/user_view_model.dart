@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant/base/base_viewmodel.dart';
@@ -9,7 +11,7 @@ import 'package:restaurant/repository/user_repository.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/viewmodel/auth_view_model.dart';
 
-class UserViewModel extends BaseViewModel<UserRepository>{
+class UserViewModel extends BaseViewModel<UserRepository, Void>{
   late User _user;
   User get user => _user;
   set user(User user){
@@ -44,4 +46,7 @@ class UserViewModel extends BaseViewModel<UserRepository>{
   UserRepository createRepository() {
     return UserRepository();
   }
+
+  @override
+  Future<void> getDataList() async{}
 }

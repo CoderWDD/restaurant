@@ -22,6 +22,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer2<FoodDetailsProvider, HomeFavoriteProvider>(builder: (context, foodDetailsProvider, homeFavoriteProvider, _){
+      if (homeFavoriteProvider.hasBeenLoaded) widget.dish.isCollected = homeFavoriteProvider.hasFavorite;
       return Scaffold(
           body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -36,7 +37,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   ),
                   actions: [
                     IconButton(
-                      icon: homeFavoriteProvider.hasFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
+                      icon: widget.dish.isCollected ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
                       onPressed: () {
                         // handle favorite button press
                         if (homeFavoriteProvider.hasFavorite){

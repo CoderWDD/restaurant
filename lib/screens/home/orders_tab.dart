@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant/components/refresh_list_component.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
 import '../../base/view_state.dart';
@@ -150,74 +151,12 @@ class AllCartItemListComponent extends StatefulWidget {
 }
 
 class _AllCartItemListComponentState extends State<AllCartItemListComponent> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    Future.microtask(() => firstLoad());
-  }
-
-  void firstLoad(){
-    final provider = Provider.of<AllCartListProvider>(context, listen: false);
-    provider.getCartList();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.offset >=
-        _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      _loadMore();
-    }
-  }
-
-  Future<void> _loadMore() async{
-    final provider = Provider.of<AllCartListProvider>(context, listen: false);
-    await provider.getCartList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AllCartListProvider>(builder: (context, provider, _) {
-      // if the state of the provider is loading, show a circular progress indicator
-      if (provider.viewState == ViewState.loading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      // if the state of the provider is error, show an error message
-      if (provider.viewState == ViewState.error) {
-        return const Center(
-          child: Text('Failed to fetch cart data.'),
-        );
-      }
-
       return Stack(
         children: [
-          RefreshIndicator(
-            triggerMode: RefreshIndicatorTriggerMode.anywhere,
-            onRefresh: _loadMore,
-            child: ListView.builder(
-              itemCount: provider.cartList.length + (provider.hasMoreData ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == provider.cartList.length) {
-                  return provider.viewState == ViewState.loading
-                      ? const CircularProgressIndicator()
-                      : const SizedBox();
-                } else {
-                  return CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: provider.cartList[index],);
-                }
-              },
-            ),
-          ),
+          RefreshListComponent<AllCartListProvider>(provider: provider, itemBuilder: (item) => CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: item as CartItem,)),
           Positioned(
             bottom: 0,
             right: 0,
@@ -258,74 +197,12 @@ class ServedCartItemListComponent extends StatefulWidget {
 
 class _ServedCartItemListComponentState
     extends State<ServedCartItemListComponent> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    Future.microtask(() => firstLoad());
-  }
-
-  void firstLoad(){
-    final provider = Provider.of<ServeCartListProvider>(context, listen: false);
-    provider.getServedCartList();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.offset >=
-        _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      _loadMore();
-    }
-  }
-
-  Future<void> _loadMore() async{
-    final provider = Provider.of<ServeCartListProvider>(context, listen: false);
-    await provider.getServedCartList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ServeCartListProvider>(builder: (context, provider, _) {
-      // if the state of the provider is loading, show a circular progress indicator
-      if (provider.viewState == ViewState.loading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      // if the state of the provider is error, show an error message
-      if (provider.viewState == ViewState.error) {
-        return const Center(
-          child: Text('Failed to fetch cart data.'),
-        );
-      }
-
       return Stack(
         children: [
-          RefreshIndicator(
-            triggerMode: RefreshIndicatorTriggerMode.anywhere,
-            onRefresh: _loadMore,
-            child: ListView.builder(
-              itemCount: provider.cartList.length + (provider.hasMoreData ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == provider.cartList.length) {
-                  return provider.viewState == ViewState.loading
-                      ? const CircularProgressIndicator()
-                      : const SizedBox();
-                } else {
-                  return CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: provider.cartList[index],);
-                }
-              },
-            ),
-          ),
+          RefreshListComponent<ServeCartListProvider>(provider: provider, itemBuilder: (item) => CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: item as CartItem,),),
           Positioned(
             bottom: 0,
             right: 0,
@@ -366,74 +243,12 @@ class UnServedCartItemListComponent extends StatefulWidget {
 
 class _UnServedCartItemListComponentState
     extends State<UnServedCartItemListComponent> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    Future.microtask(() => firstLoad());
-  }
-
-  void firstLoad(){
-    final provider = Provider.of<UnServeCartListProvider>(context, listen: false);
-    provider.getUnServedCartList();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.offset >=
-        _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      _loadMore();
-    }
-  }
-
-  Future<void> _loadMore() async{
-    final provider = Provider.of<UnServeCartListProvider>(context, listen: false);
-    await provider.getUnServedCartList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<UnServeCartListProvider>(builder: (context, provider, _) {
-      // if the state of the provider is loading, show a circular progress indicator
-      if (provider.viewState == ViewState.loading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      // if the state of the provider is error, show an error message
-      if (provider.viewState == ViewState.error) {
-        return const Center(
-          child: Text('Failed to fetch cart data.'),
-        );
-      }
-
       return Stack(
         children: [
-          RefreshIndicator(
-            triggerMode: RefreshIndicatorTriggerMode.anywhere,
-            onRefresh: _loadMore,
-            child: ListView.builder(
-              itemCount: provider.cartList.length + (provider.hasMoreData ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == provider.cartList.length) {
-                  return provider.viewState == ViewState.loading
-                      ? const CircularProgressIndicator()
-                      : const SizedBox();
-                } else {
-                  return CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: provider.cartList[index],);
-                }
-              },
-            ),
-          ),
+          RefreshListComponent<UnServeCartListProvider>(provider: provider, itemBuilder: (item) => CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: item as CartItem,),),
           Positioned(
             bottom: 0,
             right: 0,

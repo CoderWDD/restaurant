@@ -7,6 +7,7 @@ class Dish {
   final int id;
   final int categoryId;
   final int status;
+  bool isCollected;
 
   Dish({
     required this.image,
@@ -16,6 +17,7 @@ class Dish {
     required this.id,
     required this.categoryId,
     required this.status,
+    required this.isCollected
   });
 
   factory Dish.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class Dish {
       id: json['id'] as int,
       categoryId: json['categoryId'] as int,
       status: json['status'] as int,
+      isCollected: json['isCollected'] as bool
     );
   }
 
@@ -39,6 +42,7 @@ class Dish {
       'id': id,
       'categoryId': categoryId,
       'status': status,
+      'isCollected': isCollected
     };
   }
 }
