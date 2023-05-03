@@ -7,7 +7,7 @@ import '../base/api_response.dart';
 import '../entities/pageable.dart';
 import '../network/RestaurantDio.dart';
 
-class RestaurantRepository extends BaseRepository{
+class HomeRestaurantRepository extends BaseRepository{
   // get the recommended restaurant list
   Future<ApiResponse<ApiResponseData<Canteen>>> getRecommendedRestaurantList({int size = 10}) async{
     final res = await RestaurantDio().dio.get("/store/$size");

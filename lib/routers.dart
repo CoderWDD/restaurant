@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:restaurant/entities/QRResEntity.dart';
+import 'package:restaurant/screens/canteen/canteen_screen.dart';
 import 'package:restaurant/screens/food_detail/food_details_screen.dart';
 import 'package:restaurant/screens/login/login_screen.dart';
 import 'package:restaurant/screens/qr_code_scan/qr_code_scan_screen.dart';
@@ -51,6 +53,14 @@ final GoRouter routers = GoRouter(
     GoRoute(
       path: QR_Code_Scan_Screen,
       builder: (context, state) => const QRCodeScanScreen(),
+    ),
+    GoRoute(
+      path: CANTEEN_SCREEN,
+      name: CANTEEN_SCREEN,
+      builder: (context, state) {
+        final data = state.extra as QRResEntity;
+        return CanteenDetailsScreen(qrResEntity: data);
+      },
     ),
   ],
 );

@@ -1,20 +1,19 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant/entities/QRResEntity.dart';
+import 'package:restaurant/viewmodel/canteen_provider.dart';
 
 import '../../entities/category.dart';
 import '../../entities/dish.dart';
 
 
 class CanteenDetailsScreen extends StatefulWidget {
-  final String canteenName;
-  final List<Category> categories;
-  final List<Dish> dishes;
+  final QRResEntity qrResEntity;
 
   const CanteenDetailsScreen({
     super.key,
-    required this.canteenName,
-    required this.categories,
-    required this.dishes,
+    required this.qrResEntity,
   });
 
   @override
@@ -22,91 +21,24 @@ class CanteenDetailsScreen extends StatefulWidget {
 }
 
 class _CanteenDetailsScreenState extends State<CanteenDetailsScreen> {
-  late List<Dish> _filteredDishes;
+  late TabController _tabController;
 
   @override
   void initState() {
-    _filteredDishes = widget.dishes;
     super.initState();
   }
 
-  void _filterDishesByCategory(Category category) {
-    setState(() {
-      _filteredDishes =
-          widget.dishes.where((dish) => dish.categoryId == category.id).toList();
-    });
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext pageContext) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.canteenName),
+        title: Text(widget.qrResEntity.canteenName),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text(
-              'Categories',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-          ),
-          SizedBox(
-            height: 56.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.categories.length,
-              itemBuilder: (context, index) {
-                final category = widget.categories[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () => _filterDishesByCategory(category),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
-                    ),
-                    child: Text(category.name),
-                  ),
-                );
-              },
-            ),
-          ),
-          Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text(
-              'Dishes',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredDishes.length,
-              itemBuilder: (context, index) {
-                final dish = _filteredDishes[index];
-                return ListTile(
-                  leading: Image.network(
-                    dish.image,
-                    height: 64.0,
-                    width: 64.0,
-                    fit: BoxFit.cover,
-                  ),
-                  title: Text(dish.name),
-                  subtitle: Text(dish.description),
-                  trailing: Text('\$${dish.price.toStringAsFixed(2)}'),
-                  onTap: () {
-                    // Navigate to dish details screen
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+      body: Consumer<CanteenProvider> (builder: (context, provider, _) {
+        provider.dataList.length;
+        return const Placeholder();
+      }),
     );
   }
 }

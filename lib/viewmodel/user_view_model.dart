@@ -26,11 +26,11 @@ class UserViewModel extends BaseViewModel<UserRepository, Void>{
     var res = await repository.login(user);
     setViewStateByRes(res, successCode: 1);
     if (viewState == ViewState.success) {
-      user.token = res.data;
+      user.token = res.data!;
       _user = user;
       routers.go(HOME_ROUTE);
     }
-    return res.data;
+    return res.data!;
   }
 
   // user register method

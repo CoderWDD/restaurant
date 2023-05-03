@@ -3,7 +3,7 @@ import 'package:restaurant/base/view_state.dart';
 class ApiResponse<T> {
   final int code;
   final String message;
-  final T data;
+  final T? data;
   final Map<String, dynamic> map;
 
   ApiResponse({
