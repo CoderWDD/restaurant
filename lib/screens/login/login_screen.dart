@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant/utils/px2dp.dart';
 import 'package:restaurant/viewmodel/auth_view_model.dart';
 import 'package:restaurant/viewmodel/user_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../base/view_state.dart';
 import '../../components/buttons_widgets.dart';
@@ -122,12 +123,18 @@ class _LoginScaffoldState extends State<LoginScaffold> {
                       text: 'Login',
                       onPressed: () {
                         // call login function
-                        var userViewModel = Provider.of<UserViewModel>(context, listen: false);
-                        var loginRes = userViewModel.login(_username, _password);
+                        var userViewModel =
+                            Provider.of<UserViewModel>(context, listen: false);
+                        var loginRes =
+                            userViewModel.login(_username, _password);
                         loginRes.then((value) {
                           if (userViewModel.viewState == ViewState.success) {
+                            // save user info to local storage
+                            saveUserInfoToLocalStorage(_username, _password);
                             // save token to secure storage
-                            var authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                            var authViewModel = Provider.of<AuthViewModel>(
+                                context,
+                                listen: false);
                             authViewModel.saveToken(value);
                           }
                         });
@@ -141,5 +148,14 @@ class _LoginScaffoldState extends State<LoginScaffold> {
         ),
       ),
     );
+  }
+
+  Future<void> saveUserInfoToLocalStorage(String username, String password) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', username);
+    await prefs.setString('password', password);
+    prefs.reload();
+
+
   }
 }

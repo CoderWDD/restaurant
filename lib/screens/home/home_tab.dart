@@ -13,6 +13,7 @@ import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
 import '../../constants/router_constants.dart';
 import '../../go_router_data.dart';
+import '../../viewmodel/canteen_provider.dart';
 import '../../viewmodel/home_dish_list_view_model.dart';
 
 class HomeTab extends StatefulWidget {
@@ -129,6 +130,8 @@ class _RestaurantListComponentState extends State<RestaurantListComponent> {
             address: item.address,
             onTap: () {
               // todo switch to the restaurant page
+              // Provider.of<CanteenProvider>(context, listen: false).getDataListByBoardId(item.id);
+              // Navigator.pushNamed(context, '/canteen', arguments: res);
             },
           ),
         );

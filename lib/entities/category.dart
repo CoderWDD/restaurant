@@ -5,7 +5,7 @@ class Category {
   final String name;
   final int id;
   final int storeId;
-  final Set<Dish> dishSet;
+  final List<Dish> dishSet;
 
   Category({
     required this.name,
@@ -19,7 +19,8 @@ class Category {
       name: json['name'] as String,
       id: json['id'] as int,
       storeId: json['storeId'] as int,
-      dishSet: Set<Dish>.from(json['dishSet'].map((x) => Dish.fromJson(x))),
+      dishSet: List<Dish>.from(json['dishSet'].map((x) => Dish.fromJson(x)))
+      // dishSet: Set<Dish>.from(json['dishSet'].map((x) => Dish.fromJson(x))),
     );
   }
 

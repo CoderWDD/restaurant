@@ -7,7 +7,7 @@ class Dish {
   final int id;
   final int categoryId;
   final int status;
-  bool isCollected;
+  bool isCollected = false;
 
   Dish({
     required this.image,

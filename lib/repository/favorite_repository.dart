@@ -15,16 +15,16 @@ class FavoriteRepository extends BaseRepository{
   }
 
   // add a favorite
-  Future<ApiResponse<Favorite>> addFavorite(int dishId) async{
+  Future<ApiResponse<String>> addFavorite(int dishId) async{
     // add a favorite
     final res = await RestaurantDio().dio.get("/collect/$dishId");
-    return ApiResponse.fromJson(res.data, (data) => Favorite.fromJson(data));
+    return ApiResponse.fromJson(res.data, (data) => data.toString());
   }
 
   // delete a favorite
-  Future<ApiResponse<Favorite>> deleteFavorite(int dishId) async{
+  Future<ApiResponse<String>> deleteFavorite(int dishId) async{
     // delete a favorite
     final res = await RestaurantDio().dio.delete("/collect/$dishId");
-    return ApiResponse.fromJson(res.data, (data) => Favorite.fromJson(data));
+    return ApiResponse.fromJson(res.data, (data) => data.toString());
   }
 }

@@ -17,7 +17,6 @@ class QRCodeScanScreen extends StatelessWidget {
           // handle the scanned value
           QRResEntity res = QRResEntity.fromJson(jsonDecode(value));
           if (res.canteenId != -1) {
-            Provider.of<CanteenProvider>(context, listen: false).getDataListByBoardId(res.tableId);
             Navigator.pushNamed(context, '/canteen', arguments: res);
           } else {
             Navigator.pushNamed(context, '/restaurant', arguments: res);

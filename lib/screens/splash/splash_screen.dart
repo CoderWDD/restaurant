@@ -1,19 +1,30 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant/components/buttons_widgets.dart';
 import 'package:restaurant/utils/px2dp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../base/view_state.dart';
 import '../../constants/assets_constants.dart';
+import '../../viewmodel/auth_view_model.dart';
+import '../../viewmodel/user_view_model.dart';
 
 class SplashScreen extends StatelessWidget {
   final VoidCallback onLoginPressed;
   final VoidCallback onRegisterPressed;
-  const SplashScreen({Key? key, required this.onLoginPressed, required this.onRegisterPressed}) : super(key: key);
+
+  SplashScreen({Key? key, required this.onLoginPressed, required this.onRegisterPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    getUserInfoFromSharedPreferences(userViewModel = userViewModel, (token){
+      // save token to secure storage
+      var authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+      authViewModel.saveToken(token);
+    });
+
     return Container(
       color: const Color(0xFFFFFCFA),
       padding: EdgeInsets.symmetric(horizontal: 24.px3pt),
@@ -96,5 +107,28 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+
+
+  Future<bool> getUserInfoFromSharedPreferences(UserViewModel userViewModel, Function(String token) onLoginSuccess) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username') ?? "";
+    final password = prefs.getString('password') ?? "";
+    print("================================================");
+    print("================================================");
+    print(username);
+    print(password);
+    print("================================================");
+    print("================================================");
+    if (username.isEmpty || password.isEmpty) return false;
+    var loginRes = userViewModel.login(username, password);
+    loginRes.then((value) {
+      if (userViewModel.viewState == ViewState.success) {
+        // save token to secure storage
+        onLoginSuccess(value);
+      }
+    });
+    return true;
   }
 }

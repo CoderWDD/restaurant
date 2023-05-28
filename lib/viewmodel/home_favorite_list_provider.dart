@@ -35,7 +35,7 @@ class HomeFavoriteProvider extends BaseViewModel<FavoriteRepository, Favorite>{
     if (viewState == ViewState.success) {
       hasBeenLoaded = true;
       hasFavorite = false;
-      dataList.removeWhere((element) => element.dishId == dishId);
+      dataList.removeWhere((element) => element.id == dishId);
     }
     notifyListeners();
   }

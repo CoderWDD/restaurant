@@ -30,8 +30,10 @@ abstract class BaseViewModel<T extends BaseRepository, DataType> with ChangeNoti
   void setViewStateByRes<Type>(ApiResponse<Type> response, {int successCode = 200}){
     if(response.code == successCode){
       setViewState(ViewState.success);
+      print("success");
     } else {
       setViewState(ViewState.error);
+      print("error");
     }
   }
 }

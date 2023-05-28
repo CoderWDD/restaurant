@@ -48,7 +48,7 @@ class _FavoriteListComponentState extends State<FavoriteListComponent> {
           key: Key((item as Favorite).id.toString()),
           favorite: item,
           onFavoriteIconClick: (favorite){
-            provider.deleteFavorite(favorite.dishId);
+            provider.deleteFavorite(favorite.id);
           },
         ));
       },

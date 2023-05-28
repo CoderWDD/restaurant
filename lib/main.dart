@@ -12,12 +12,14 @@ import 'package:restaurant/viewmodel/order_view_model.dart';
 import 'package:restaurant/viewmodel/served_cart_list_provider.dart';
 import 'package:restaurant/viewmodel/unserved_cart_list_provider.dart';
 import 'package:restaurant/viewmodel/user_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'md3/color_schemes.g.dart';
 
 import 'routers.dart';
 
 void main() {
+  SharedPreferences.setMockInitialValues({});
   runZonedGuarded(
     () {
       runApp(

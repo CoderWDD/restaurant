@@ -9,8 +9,9 @@ import '../network/RestaurantDio.dart';
 
 class CanteenRepository extends BaseRepository{
   // get the category list by board id
-  Future<ApiResponse<ApiResponseData<Category>>> getDishListByBoardId(int boardId) async{
+  Future<ApiResponse<ApiResponseData<Category>>> getCategoryListByBoardId(int boardId) async{
     final res = await RestaurantDio().dio.get("/board/$boardId");
     return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => Category.fromJson(e)).toList()));
   }
+
 }
