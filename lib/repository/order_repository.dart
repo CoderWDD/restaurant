@@ -17,6 +17,20 @@ class OrderRepository extends BaseRepository{
     return ApiResponse.fromJson(res.data, (data) => data.toString());
   }
 
+  // delete the order from cart
+  Future<ApiResponse<String>> deleteFromCart(int orderId) async{
+    // delete the order from cart
+    final res = await RestaurantDio().dio.delete("/shoppingCart/$orderId");
+    return ApiResponse.fromJson(res.data, (data) => data.toString());
+  }
+
+  // get the order list of cart
+  Future<ApiResponse<ApiResponseData<Order>>> getOrderList({int page = 1, int size = 10}) async{
+    // get the order list of cart
+    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size", );
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => Order.fromJson(e)).toList()));
+  }
+
   // place an order
   Future<ApiResponse<String>> placeOrder(List<String> orderList) async{
     // place an order
@@ -33,14 +47,14 @@ class OrderRepository extends BaseRepository{
   // get the cart list
   Future<ApiResponse<ApiResponseData<CartItem>>> getCartList({int page = 1, int size = 10}) async{
     // get the cart list
-    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size", );
+    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size");
     return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
   }
 
   // get the served cart list
   Future<ApiResponse<ApiResponseData<CartItem>>> getServedCartList({int page = 1, int size = 10}) async{
     // get the cart list
-    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size/1", );
+    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size/1");
     return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
   }
 

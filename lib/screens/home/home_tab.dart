@@ -128,10 +128,11 @@ class _RestaurantListComponentState extends State<RestaurantListComponent> {
             title: (item as Canteen).name,
             description: item.description,
             address: item.address,
+            url: item.image ?? '',
             onTap: () {
-              // todo switch to the restaurant page
-              // Provider.of<CanteenProvider>(context, listen: false).getDataListByBoardId(item.id);
-              // Navigator.pushNamed(context, '/canteen', arguments: res);
+              // switch to the restaurant page
+              routers.push(RESTAURANT_SCREEN,
+                  extra: GoRouterData(query: item.toJson()));
             },
           ),
         );
@@ -148,8 +149,6 @@ class DishListComponent extends StatefulWidget {
 }
 
 class _DishListComponentState extends State<DishListComponent> {
-
-
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeDishListProvider>(

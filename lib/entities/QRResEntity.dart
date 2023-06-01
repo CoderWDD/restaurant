@@ -23,7 +23,8 @@ class QRResEntity {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['canteenId'] = canteenId;
     data['tableId'] = tableId;
-    data['cateenName'] = canteenName;
+    data['canteenName'] = canteenName;
     return data;
   }
 }
+

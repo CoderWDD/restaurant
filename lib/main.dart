@@ -9,6 +9,7 @@ import 'package:restaurant/viewmodel/home_dish_list_view_model.dart';
 import 'package:restaurant/viewmodel/home_favorite_list_provider.dart';
 import 'package:restaurant/viewmodel/home_restaurant_list_provider.dart';
 import 'package:restaurant/viewmodel/order_view_model.dart';
+import 'package:restaurant/viewmodel/restaurant_provider.dart';
 import 'package:restaurant/viewmodel/served_cart_list_provider.dart';
 import 'package:restaurant/viewmodel/unserved_cart_list_provider.dart';
 import 'package:restaurant/viewmodel/user_view_model.dart';
@@ -36,6 +37,7 @@ void main() {
             ChangeNotifierProvider(create: (_) => AllCartListProvider()),
             ChangeNotifierProvider(create: (_) => ServeCartListProvider()),
             ChangeNotifierProvider(create: (_) => UnServeCartListProvider()),
+            ChangeNotifierProvider(create: (_) => RestaurantProvider()),
           ],
           child: const MyApp(),
         ),

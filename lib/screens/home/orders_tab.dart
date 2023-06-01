@@ -1,10 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant/components/refresh_list_component.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
-import '../../base/view_state.dart';
 import '../../entities/cart.dart';
 import '../../viewmodel/all_cart_List_provider.dart';
 import '../../viewmodel/served_cart_list_provider.dart';
@@ -19,103 +17,132 @@ class OrdersTab extends StatefulWidget {
 
 class _OrdersTabState extends State<OrdersTab>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  static List<String> tabTitles = ['All', 'Served', 'UnServed'];
-
-  final List<Widget> _children = [
-    const AllCartItemListComponent(),
-    const ServedCartItemListComponent(),
-    const UnServedCartItemListComponent(),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: tabTitles.length, vsync: this);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return <Widget>[
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _TabLayoutDelegate(
-              TabBar(
-                dragStartBehavior: DragStartBehavior.start,
-                isScrollable: true,
-                indicator: UnderlineTabIndicator(
-                  borderRadius: BorderRadius.circular(4.px3pt),
-                  borderSide: BorderSide(
-                    width: 3.px3pt,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  insets: EdgeInsets.symmetric(horizontal: 16.px3pt),
-                ),
-                labelColor: Theme.of(context).colorScheme.primary,
-                unselectedLabelColor:
-                    Theme.of(context).colorScheme.onSurfaceVariant,
-                labelStyle: TextStyle(
-                  fontFamily: 'PoppinsMedium',
-                  fontSize: 16.px3pt,
-                  fontWeight: FontWeight.w500,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontFamily: 'PoppinsMedium',
-                  fontSize: 12.px3pt,
-                  fontWeight: FontWeight.w400,
-                ),
-                controller: _tabController,
-                tabs: tabTitles
-                    .map((tabTitle) => Tab(
-                          text: tabTitle,
-                        ))
-                    .toList(),
-              ),
-            ),
-          ),
-        ];
-      },
-      body: DefaultTabController(
-        length: tabTitles.length,
-        child: TabBarView(
-          controller: _tabController,
-          children: _children,
-        ),
-      ),
-    );
-
-    return Stack(
-      children: [
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Container(
-            padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
-            color: Theme.of(context).colorScheme.onPrimary,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              ),
-              child: Text(
-                'Pay',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.px3pt,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'PoppinsSemiBold',
-                ),
-              ),
-            ),
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Expanded(
+          child: OrderListComponent(),
         ),
       ],
     );
   }
 }
+
+class OrderListComponent extends StatefulWidget {
+  const OrderListComponent({Key? key}) : super(key: key);
+
+  @override
+  State<OrderListComponent> createState() => _OrderListComponentState();
+}
+
+class _OrderListComponentState extends State<OrderListComponent> {
+  @override
+  Widget build(BuildContext context) {
+    return const AllCartItemListComponent();
+  }
+}
+
+// class _OrdersTabState extends State<OrdersTab>
+//     with SingleTickerProviderStateMixin {
+//   late TabController _tabController;
+//   static List<String> tabTitles = ['All', 'Served', 'UnServed'];
+//
+//   final List<Widget> _children = [
+//     const AllCartItemListComponent(),
+//     const ServedCartItemListComponent(),
+//     const UnServedCartItemListComponent(),
+//   ];
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _tabController = TabController(length: tabTitles.length, vsync: this);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return NestedScrollView(
+//       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+//         return <Widget>[
+//           SliverPersistentHeader(
+//             pinned: true,
+//             delegate: _TabLayoutDelegate(
+//               TabBar(
+//                 dragStartBehavior: DragStartBehavior.start,
+//                 isScrollable: true,
+//                 indicator: UnderlineTabIndicator(
+//                   borderRadius: BorderRadius.circular(4.px3pt),
+//                   borderSide: BorderSide(
+//                     width: 3.px3pt,
+//                     color: Theme.of(context).colorScheme.primary,
+//                   ),
+//                   insets: EdgeInsets.symmetric(horizontal: 16.px3pt),
+//                 ),
+//                 labelColor: Theme.of(context).colorScheme.primary,
+//                 unselectedLabelColor:
+//                     Theme.of(context).colorScheme.onSurfaceVariant,
+//                 labelStyle: TextStyle(
+//                   fontFamily: 'PoppinsMedium',
+//                   fontSize: 16.px3pt,
+//                   fontWeight: FontWeight.w500,
+//                 ),
+//                 unselectedLabelStyle: TextStyle(
+//                   fontFamily: 'PoppinsMedium',
+//                   fontSize: 12.px3pt,
+//                   fontWeight: FontWeight.w400,
+//                 ),
+//                 controller: _tabController,
+//                 tabs: tabTitles
+//                     .map((tabTitle) => Tab(
+//                           text: tabTitle,
+//                         ))
+//                     .toList(),
+//               ),
+//             ),
+//           ),
+//         ];
+//       },
+//       body: DefaultTabController(
+//         length: tabTitles.length,
+//         child: TabBarView(
+//           controller: _tabController,
+//           children: _children,
+//         ),
+//       ),
+//     );
+//
+//     return Stack(
+//       children: [
+//         Positioned(
+//           bottom: 0,
+//           right: 0,
+//           child: Container(
+//             padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
+//             color: Theme.of(context).colorScheme.onPrimary,
+//             child: ElevatedButton(
+//               onPressed: () {},
+//               style: ElevatedButton.styleFrom(
+//                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
+//                 backgroundColor: Theme.of(context).colorScheme.primary,
+//               ),
+//               child: Text(
+//                 'Pay',
+//                 style: TextStyle(
+//                   color: Colors.white,
+//                   fontSize: 12.px3pt,
+//                   fontWeight: FontWeight.bold,
+//                   fontFamily: 'PoppinsSemiBold',
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class _TabLayoutDelegate extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
@@ -156,7 +183,13 @@ class _AllCartItemListComponentState extends State<AllCartItemListComponent> {
     return Consumer<AllCartListProvider>(builder: (context, provider, _) {
       return Stack(
         children: [
-          RefreshListComponent<AllCartListProvider>(provider: provider, itemBuilder: (item) => CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: item as CartItem,)),
+          RefreshListComponent<AllCartListProvider>(
+              provider: provider,
+              itemBuilder: (item) => CartItemComponent(
+                    onSelect: (bool? value) {},
+                    isSelect: false,
+                    cartItem: item as CartItem,
+                  )),
           Positioned(
             bottom: 0,
             right: 0,
@@ -202,7 +235,14 @@ class _ServedCartItemListComponentState
     return Consumer<ServeCartListProvider>(builder: (context, provider, _) {
       return Stack(
         children: [
-          RefreshListComponent<ServeCartListProvider>(provider: provider, itemBuilder: (item) => CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: item as CartItem,),),
+          RefreshListComponent<ServeCartListProvider>(
+            provider: provider,
+            itemBuilder: (item) => CartItemComponent(
+              onSelect: (bool? value) {},
+              isSelect: false,
+              cartItem: item as CartItem,
+            ),
+          ),
           Positioned(
             bottom: 0,
             right: 0,
@@ -248,7 +288,14 @@ class _UnServedCartItemListComponentState
     return Consumer<UnServeCartListProvider>(builder: (context, provider, _) {
       return Stack(
         children: [
-          RefreshListComponent<UnServeCartListProvider>(provider: provider, itemBuilder: (item) => CartItemComponent(onSelect: (bool? value) {  }, isSelect: false, cartItem: item as CartItem,),),
+          RefreshListComponent<UnServeCartListProvider>(
+            provider: provider,
+            itemBuilder: (item) => CartItemComponent(
+              onSelect: (bool? value) {},
+              isSelect: false,
+              cartItem: item as CartItem,
+            ),
+          ),
           Positioned(
             bottom: 0,
             right: 0,
@@ -283,7 +330,13 @@ class CartItemComponent extends StatefulWidget {
   final bool isSelect;
   final ValueChanged<bool?>? onSelect;
   final CartItem cartItem;
-  const CartItemComponent({Key? key, required this.onSelect, required this.isSelect, required this.cartItem}) : super(key: key);
+
+  const CartItemComponent(
+      {Key? key,
+      required this.onSelect,
+      required this.isSelect,
+      required this.cartItem})
+      : super(key: key);
 
   @override
   State<CartItemComponent> createState() => _CartItemComponentState();
@@ -301,20 +354,17 @@ class _CartItemComponentState extends State<CartItemComponent> {
         widget.cartItem.name,
         style: Theme.of(context).textTheme.titleLarge,
       ),
-      subtitle: Text(widget.cartItem.dishFlavor),
+      subtitle: Text(widget.cartItem.dishFlavor ?? ''),
       trailing: Text(
         '\$${widget.cartItem.amount}',
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-        ),
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
       ),
     );
   }
 }
-
-
-
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);

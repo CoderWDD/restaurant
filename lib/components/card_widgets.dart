@@ -6,7 +6,7 @@ import 'package:restaurant/utils/px2dp.dart';
 import '../md3/color_schemes.g.dart';
 
 class PromotionsCard extends StatefulWidget {
-  final String? url;
+  final String url;
   final String title;
   final String description;
   final String address;
@@ -17,7 +17,7 @@ class PromotionsCard extends StatefulWidget {
       required this.title,
       required this.description,
       required this.address,
-      this.url,
+      required this.url,
       required this.onTap})
       : super(key: key);
 
@@ -55,7 +55,7 @@ class _PromotionsCardState extends State<PromotionsCard> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.px3pt),
                       child: Image.network(
-                        widget.url ?? defaultImageUrl,
+                        widget.url,
                         fit: BoxFit.cover,
                       ),
                     ),

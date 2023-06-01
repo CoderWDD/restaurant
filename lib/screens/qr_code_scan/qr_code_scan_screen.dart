@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:restaurant/entities/QRResEntity.dart';
-import 'package:restaurant/viewmodel/canteen_provider.dart';
 
 class QRCodeScanScreen extends StatelessWidget {
   const QRCodeScanScreen({Key? key}) : super(key: key);

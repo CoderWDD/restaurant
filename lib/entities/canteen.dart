@@ -5,6 +5,7 @@ class Canteen {
   final String description;
   final int employeeId;
   final int id;
+  String? image;
 
   Canteen({
     required this.address,
@@ -12,6 +13,7 @@ class Canteen {
     required this.description,
     required this.employeeId,
     required this.id,
+    this.image,
   });
 
   factory Canteen.fromJson(Map<String, dynamic> json) {
@@ -21,6 +23,7 @@ class Canteen {
       description: json['description'] as String,
       employeeId: json['employeeId'] as int,
       id: json['id'] as int,
+      image: json['image'] as String? ?? '',
     );
   }
 
@@ -31,6 +34,7 @@ class Canteen {
       'description': description,
       'employeeId': employeeId,
       'id': id,
+      'image': image ?? ''
     };
   }
 }
