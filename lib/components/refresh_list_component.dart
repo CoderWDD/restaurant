@@ -38,7 +38,7 @@ class _RefreshListComponentState<T extends BaseViewModel>
     }
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.anywhere,
-      onRefresh: _loadMore,
+      onRefresh: _firstLoad,
       child: ListView.builder(
         scrollDirection: widget.scrollDirection,
         itemCount: widget.provider.dataList.length +
@@ -79,8 +79,9 @@ class _RefreshListComponentState<T extends BaseViewModel>
     }
   }
 
-  void _firstLoad() {
-    widget.provider.getDataList();
+  Future<void> _firstLoad() async{
+    widget.provider.isFirstLoad = true;
+    await widget.provider.getDataList();
   }
 
   Future<void> _loadMore() async {

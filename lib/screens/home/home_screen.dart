@@ -1,7 +1,4 @@
-import 'dart:math';
-import 'dart:typed_data';
 
-import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +9,8 @@ import 'package:restaurant/screens/home/orders_tab.dart';
 import 'package:restaurant/screens/home/person_tab.dart';
 import 'package:restaurant/utils/px2dp.dart';
 import 'package:restaurant/viewmodel/user_view_model.dart';
-
-import '../../components/card_widgets.dart';
-import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
 import '../../constants/router_constants.dart';
-import '../../md3/color_schemes.g.dart';
 import '../menu_drawer/drawer_menu.dart';
 
 class MyHomePage extends StatefulWidget {

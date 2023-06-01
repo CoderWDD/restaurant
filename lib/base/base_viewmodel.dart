@@ -15,6 +15,7 @@ abstract class BaseViewModel<T extends BaseRepository, DataType> with ChangeNoti
   int currentPage = 1;
   int pageSize = 10;
   bool hasMoreData = true;
+  bool isFirstLoad = true;
 
   ViewState viewState = ViewState.loading;
 
@@ -35,5 +36,12 @@ abstract class BaseViewModel<T extends BaseRepository, DataType> with ChangeNoti
       setViewState(ViewState.error);
       print("error");
     }
+  }
+
+  void resetDataFetch(){
+    currentPage = 1;
+    pageSize = 10;
+    hasMoreData = true;
+    isFirstLoad = true;
   }
 }

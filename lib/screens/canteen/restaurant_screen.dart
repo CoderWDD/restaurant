@@ -22,13 +22,6 @@ class RestaurantScreen extends StatefulWidget {
 class _RestaurantScreenState extends State<RestaurantScreen> {
   @override
   Widget build(BuildContext context) {
-    print("=====================================");
-    print("=====================================");
-    print("=====================================");
-    print(widget.canteen);
-    print("=====================================");
-    print("=====================================");
-    print("=====================================");
     return Consumer<RestaurantProvider>(
       builder: (context, provider, _) {
         if (!provider.checkHasData()) {
