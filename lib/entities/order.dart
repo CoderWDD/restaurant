@@ -3,6 +3,7 @@ class Order {
   final int dishId;
   final String dishFlavor;
   final int number;
+  final int boardId = 1;
 
   Order({
     required this.dishId,
@@ -23,6 +24,7 @@ class Order {
       'dishId': dishId,
       'dishFlavor': dishFlavor,
       'number': number,
+      'boardId': boardId,
     };
   }
 }

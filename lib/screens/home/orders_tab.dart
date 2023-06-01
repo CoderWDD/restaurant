@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant/components/add_to_cart_dialog.dart';
 import 'package:restaurant/components/refresh_list_component.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
+import '../../components/card_widgets.dart';
 import '../../entities/cart.dart';
 import '../../viewmodel/all_cart_List_provider.dart';
 import '../../viewmodel/served_cart_list_provider.dart';
@@ -178,18 +180,53 @@ class AllCartItemListComponent extends StatefulWidget {
 }
 
 class _AllCartItemListComponentState extends State<AllCartItemListComponent> {
+  void deleteItemFromCart(AllCartListProvider provider, int index) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DeleteItemDialog(
+          text: "",
+          onDelete: () {
+            provider.deleteCartItem(provider.dataList[index].id ?? 0);
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AllCartListProvider>(builder: (context, provider, _) {
       return Stack(
         children: [
           RefreshListComponent<AllCartListProvider>(
-              provider: provider,
-              itemBuilder: (item) => CartItemComponent(
-                    onSelect: (bool? value) {},
-                    isSelect: false,
-                    cartItem: item as CartItem,
-                  )),
+            provider: provider,
+            itemBuilder: (item) => CartItemCard(
+              isSelect: provider.checkIfSelectedItem(item),
+              cartItem: item,
+              onLongPress: () {
+                deleteItemFromCart(provider, provider.dataList.indexOf(item));
+              },
+              onCheck: (value) {
+                provider.selectCartItem(item);
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 14.px3pt,
+            left: 24.px3pt,
+            child: Container(
+              padding: EdgeInsets.only(left: 16.px3pt, bottom: 4.px3pt),
+              color: Theme.of(context).colorScheme.onPrimary,
+              child: Text(
+                '\$${provider.getSelectedTotalPrice()}',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           Positioned(
             bottom: 0,
             right: 0,
@@ -346,6 +383,8 @@ class _CartItemComponentState extends State<CartItemComponent> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: true,
+      selectedColor: Colors.cyan,
       leading: Checkbox(
         value: widget.isSelect,
         onChanged: widget.onSelect,

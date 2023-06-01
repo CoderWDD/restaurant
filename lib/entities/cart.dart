@@ -9,6 +9,7 @@ class CartItem {
   final int number;
   final double amount;
   final int status;
+  bool? isSelected = false;
 
   CartItem({
     this.id,
@@ -20,6 +21,7 @@ class CartItem {
     required this.number,
     required this.amount,
     required this.status,
+    this.isSelected,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {

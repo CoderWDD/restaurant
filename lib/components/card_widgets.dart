@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
 
+import '../entities/cart.dart';
 import '../md3/color_schemes.g.dart';
 
 class PromotionsCard extends StatefulWidget {
@@ -470,3 +471,102 @@ class _IngredientsCardState extends State<IngredientsCard> {
 //     );
 //   }
 // }
+
+
+class CartItemCard extends StatefulWidget {
+  final ValueChanged<bool?>? onCheck;
+  final CartItem cartItem;
+  final VoidCallback? onLongPress;
+  final bool isSelect;
+  const CartItemCard({Key? key, required this.isSelect, required this.cartItem, required this.onLongPress, required this.onCheck}) : super(key: key);
+
+  @override
+  State<CartItemCard> createState() => _CartItemCardState();
+}
+
+class _CartItemCardState extends State<CartItemCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16.px3pt, vertical: 8.px3pt),
+      color: Theme.of(context).colorScheme.onPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(13.px3pt),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(13.px3pt),
+        onLongPress: widget.onLongPress ?? () {},
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Checkbox(
+              value: widget.isSelect,
+              onChanged: widget.onCheck,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 4.px3pt),
+              child: SizedBox(
+                width: 76.px3pt,
+                height: 76.px3pt,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(13.px3pt),
+                  child: Image.network(
+                    widget.cartItem.image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.cartItem.name,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      widget.cartItem.dishFlavor ?? '',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16.px3pt),
+              child:  Text(
+                "\$${widget.cartItem.amount}",
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16.px3pt),
+              child:  Text(
+                "x${widget.cartItem.number}",
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
