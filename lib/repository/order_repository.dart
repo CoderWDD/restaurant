@@ -38,12 +38,21 @@ class OrderRepository extends BaseRepository{
     return ApiResponse.fromJson(res.data, (data) => data.toString());
   }
 
-  // pay the order
-  Future<ApiResponse<String>> payOrder(Order order) async{
+  // order the cart item list
+  Future<ApiResponse<String>> orderCartItemList(List<int> orderList) async{
     // pay the order
-    final res = await RestaurantDio().dio.get("/shoppingCart", queryParameters: order.toJson());
+    Map<String, List<int>> map = {};
+    map["list"] = orderList;
+    final res = await RestaurantDio().dio.post("/shoppingCart", data: map);
     return ApiResponse.fromJson(res.data, (data) => data.toString());
   }
+
+  // pay the orders
+  Future<ApiResponse<String>> payOrders() async{
+    final res = await RestaurantDio().dio.get("/shoppingCart");
+    return ApiResponse.fromJson(res.data, (data) => data.toString());
+  }
+
   // get the cart list
   Future<ApiResponse<ApiResponseData<CartItem>>> getCartList({int page = 1, int size = 10}) async{
     // get the cart list
@@ -62,6 +71,18 @@ class OrderRepository extends BaseRepository{
   Future<ApiResponse<ApiResponseData<CartItem>>> getUnServedCartList({int page = 1, int size = 10}) async{
     // get the cart list
     final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size/0", );
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
+  }
+
+  // get the list of unpaid orders
+  Future<ApiResponse<ApiResponseData<CartItem>>> getUnpaidOrdersList({int page = 1, int size = 10}) async {
+    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size");
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
+  }
+
+  // get the list of paid orders
+  Future<ApiResponse<ApiResponseData<CartItem>>> getPaidOrdersList({int page = 1, int size = 10}) async {
+    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size");
     return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
   }
 

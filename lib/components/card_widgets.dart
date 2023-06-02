@@ -146,7 +146,7 @@ class DishCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(right: 4.px3pt),
+              padding: EdgeInsets.only(right: 4.px3pt, left: 4.px3pt),
               child: SizedBox(
                 width: 76.px3pt,
                 height: 76.px3pt,
@@ -168,9 +168,11 @@ class DishCard extends StatelessWidget {
                   children: [
                     Text(
                       title ?? 'title',
+                      maxLines: 1,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.fade
                       ),
                     ),
                     Text(
@@ -188,24 +190,11 @@ class DishCard extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.only(right: 16.px3pt),
-              child: TextButton(
-                onPressed: onTap ?? () {},
-                style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.px3pt),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.px3pt,
-                    vertical: 8.px3pt,
-                  ),
-                ),
-                child: Text(
-                  price ?? '\$0.00',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
+              child: Text(
+                "\$$price" ?? '\$0.00',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

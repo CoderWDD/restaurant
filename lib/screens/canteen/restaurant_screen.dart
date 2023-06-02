@@ -20,6 +20,8 @@ class RestaurantScreen extends StatefulWidget {
 }
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
+  int _currentSelectedRow = 0;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<RestaurantProvider>(
@@ -100,16 +102,18 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         return getRow(provider.categoryList[index], () {
                           setState(() {
+                            _currentSelectedRow = index;
                             provider.selectCategory(index);
                           });
-                        });
+                        }, isSelected: _currentSelectedRow == index);
                       },
                       itemCount: provider.categoryList.length,
                     )),
                 Expanded(
-                    flex: 5,
-                    child: getDishListByCategory(
-                        provider.categoryList[provider.selectedCategoryIndex]),),
+                  flex: 5,
+                  child: getDishListByCategory(
+                      provider.categoryList[provider.selectedCategoryIndex]),
+                ),
               ],
             ),
           ),
@@ -118,12 +122,14 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     );
   }
 
-  Widget getRow(Category category, Function onTap) {
+  Widget getRow(Category category, Function onTap, {required bool isSelected}) {
     return GestureDetector(
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        color: Colors.white,
+        color: isSelected
+            ? Theme.of(context).colorScheme.primaryContainer
+            : Colors.white,
         child: Text(
           category.name,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(

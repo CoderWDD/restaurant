@@ -234,13 +234,15 @@ class _AllCartItemListComponentState extends State<AllCartItemListComponent> {
               padding: EdgeInsets.only(right: 16.px3pt, bottom: 4.px3pt),
               color: Theme.of(context).colorScheme.onPrimary,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  provider.orderSelectedCartItemList();
+                },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
                 child: Text(
-                  'Pay',
+                  'Order',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12.px3pt,

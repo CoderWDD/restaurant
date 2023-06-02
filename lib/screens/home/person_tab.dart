@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
+
+import '../../constants/router_constants.dart';
+import '../../viewmodel/user_view_model.dart';
 
 class PersonTab extends StatefulWidget {
   const PersonTab({Key? key}) : super(key: key);
@@ -10,13 +15,14 @@ class PersonTab extends StatefulWidget {
 
 class _PersonTabState extends State<PersonTab> {
   String defaultUrl = 'https://picsum.photos/id/237/200/300';
-
-  String username = 'username';
-  String email = 'CoderWdd@gmail.com';
   String? urlImage;
 
   @override
   Widget build(BuildContext context) {
+    // get the user view model from provider
+    var user = Provider.of<UserViewModel>(context, listen: false).user;
+    String username = user.username;
+    String email = user.email ?? "email";
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -78,30 +84,29 @@ class _PersonTabState extends State<PersonTab> {
             child: Column(
               children: [
                 ListTile(
-                  title: const Text('Account'),
-                  leading: const Icon(Icons.account_circle),
-                  onTap: () {},
+                  title: const Text('未支付订单'),
+                  leading: const Icon(Icons.call_to_action_rounded),
+                  onTap: () {
+                    routers.push(UNPAID_ORDER_LIST_SCREEN);
+                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(10.px3pt), topRight: Radius.circular(10.px3pt)),
                   ),
                 ),
                 ListTile(
-                  title: const Text('Notifications'),
+                  title: const Text('已支付订单'),
                   leading: const Icon(Icons.notifications),
-                  onTap: () {},
+                  onTap: () {
+                    routers.push(PAID_ORDER_LIST_SCREEN);
+                  },
                 ),
                 ListTile(
-                  title: const Text('Privacy'),
-                  leading: const Icon(Icons.lock),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text('Help & Support'),
+                  title: const Text('帮助'),
                   leading: const Icon(Icons.help),
                   onTap: () {},
                 ),
                 ListTile(
-                  title: const Text('Logout'),
+                  title: const Text('退出登录'),
                   leading: const Icon(Icons.exit_to_app),
                   onTap: () {},
                   shape: RoundedRectangleBorder(

@@ -15,6 +15,11 @@ class AllCartListProvider extends BaseViewModel<OrderRepository, CartItem> {
   @override
   Future<void> getDataList() async {
     setViewState(ViewState.loading);
+    if (isFirstLoad) resetDataFetch();
+    if (!hasMoreData) {
+      setViewState(ViewState.success);
+      return;
+    }
     // get the cart list
     final res = await repository.getCartList(page: currentPage, size: pageSize);
     if (res.data == null) {
@@ -80,5 +85,28 @@ class AllCartListProvider extends BaseViewModel<OrderRepository, CartItem> {
     }
     return totalPrice;
   }
+  
+  List<int> getSelectedList(){
+    List<int> res = <int>[];
+    for (var item in dataList) {
+      if (item.isSelected ?? false) {
+        res.add(item.id!);
+      }
+    }
+    return res;
+  }
 
+  // order the selected cart item list
+  Future<void> orderSelectedCartItemList() async {
+    List<int> selectedList = getSelectedList();
+    final res = await repository.orderCartItemList(selectedList);
+    setViewStateByRes(res, successCode: 1);
+    if (viewState == ViewState.success) {
+      for (var value in selectedList) {
+        deleteCartItem(value);
+      }
+    }
+    resetDataFetch();
+    notifyListeners();
+  }
 }

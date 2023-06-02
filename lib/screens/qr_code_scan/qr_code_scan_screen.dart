@@ -16,19 +16,26 @@ class QRCodeScanScreen extends StatelessWidget {
     late Canteen res;
     return SafeArea(
       child: AiBarcodeScanner(
+        validator: (String value) {
+          res = Canteen.fromJson(jsonDecode(value));
+          return res.id != -1;
+        },
         onScan: (String value) {
+          Future.delayed(
+            Duration.zero,
+            () {
+              routers.push(RESTAURANT_SCREEN,
+                  extra: GoRouterData(query: res.toJson()));
+              //your code goes here
+            },
+          );
           // handle the scanned value
-          res =  Canteen.fromJson(jsonDecode(value));
-          if (res.id != -1) {
-            routers.push(RESTAURANT_SCREEN, extra: GoRouterData(query: res.toJson()));
-          }
         },
         onDispose: () {
           // when the scanner view is closed
-          routers.push(RESTAURANT_SCREEN, extra: GoRouterData(query: res.toJson()));
+          // routers.push(RESTAURANT_SCREEN, extra: GoRouterData(query: res.toJson()));
         },
-        onDetect: (BarcodeCapture barcodeCapture) {
-        },
+        onDetect: (BarcodeCapture barcodeCapture) {},
       ),
     );
   }
