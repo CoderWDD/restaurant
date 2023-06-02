@@ -6,7 +6,7 @@ class Dish {
   final String description;
   final int id;
   final int categoryId;
-  final int status;
+  final int? status;
   bool isCollected = false;
 
   Dish({
@@ -16,7 +16,7 @@ class Dish {
     required this.description,
     required this.id,
     required this.categoryId,
-    required this.status,
+    this.status,
     required this.isCollected
   });
 
@@ -28,7 +28,7 @@ class Dish {
       description: json['description'] as String,
       id: json['id'] as int,
       categoryId: json['categoryId'] as int,
-      status: json['status'] as int,
+      status: json['status'] as int?,
       isCollected: json['isCollected'] as bool
     );
   }
@@ -41,7 +41,7 @@ class Dish {
       'description': description,
       'id': id,
       'categoryId': categoryId,
-      'status': status,
+      'status': status ?? 0,
       'isCollected': isCollected
     };
   }

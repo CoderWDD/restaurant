@@ -8,6 +8,7 @@ import 'package:restaurant/entities/dish.dart';
 import 'package:restaurant/routers.dart';
 import 'package:restaurant/utils/px2dp.dart';
 import 'package:restaurant/viewmodel/home_restaurant_list_provider.dart';
+import 'package:restaurant/viewmodel/restaurant_provider.dart';
 import '../../components/card_widgets.dart';
 import '../../components/input_text_widgets.dart';
 import '../../constants/assets_constants.dart';
@@ -130,6 +131,7 @@ class _RestaurantListComponentState extends State<RestaurantListComponent> {
             address: item.address,
             url: item.image ?? '',
             onTap: () {
+              Provider.of<RestaurantProvider>(context, listen: false).getDataListByCanteenId(item.id);
               // switch to the restaurant page
               routers.push(RESTAURANT_SCREEN,
                   extra: GoRouterData(query: item.toJson()));

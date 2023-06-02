@@ -29,6 +29,8 @@ class RestaurantProvider extends BaseViewModel<RestaurantRepository, Category>{
   bool checkHasData() => _hasData;
 
   Future<void> getDataListByCanteenId(int canteenId) async{
+    categoryList.clear();
+    resetDataFetch();
     _hasData = false;
     setViewState(ViewState.loading);
     // get the category list by board id

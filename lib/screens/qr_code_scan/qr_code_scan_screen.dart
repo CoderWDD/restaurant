@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant/entities/canteen.dart';
 
 import '../../constants/router_constants.dart';
 import '../../go_router_data.dart';
 import '../../routers.dart';
+import '../../viewmodel/restaurant_provider.dart';
 
 class QRCodeScanScreen extends StatelessWidget {
   const QRCodeScanScreen({Key? key}) : super(key: key);
@@ -24,6 +26,7 @@ class QRCodeScanScreen extends StatelessWidget {
           Future.delayed(
             Duration.zero,
             () {
+              Provider.of<RestaurantProvider>(context, listen: false).getDataListByCanteenId(res.id);
               routers.push(RESTAURANT_SCREEN,
                   extra: GoRouterData(query: res.toJson()));
               //your code goes here

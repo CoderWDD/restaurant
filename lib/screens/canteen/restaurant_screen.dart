@@ -27,7 +27,6 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     return Consumer<RestaurantProvider>(
       builder: (context, provider, _) {
         if (!provider.checkHasData()) {
-          provider.getDataListByCanteenId(widget.canteen.id);
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -91,7 +90,8 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 ),
               ];
             },
-            body: Row(
+            body: provider.categoryList.isNotEmpty
+            ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -112,9 +112,13 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 Expanded(
                   flex: 5,
                   child: getDishListByCategory(
-                      provider.categoryList[provider.selectedCategoryIndex]),
+                    provider.categoryList[provider.selectedCategoryIndex],
+                  ),
                 ),
               ],
+            )
+            : const Center(
+              child: Text("该餐厅还没有菜品！"),
             ),
           ),
         );
