@@ -1,9 +1,11 @@
+import 'package:restaurant/entities/bill.dart';
+
 import '../base/base_viewmodel.dart';
 import '../base/view_state.dart';
 import '../entities/cart.dart';
 import '../repository/order_repository.dart';
 
-class PaidOrderListProvider extends BaseViewModel<OrderRepository, CartItem> {
+class PaidOrderListProvider extends BaseViewModel<OrderRepository, BillEntity> {
   @override
   OrderRepository createRepository() => OrderRepository();
 

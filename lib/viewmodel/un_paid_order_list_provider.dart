@@ -2,10 +2,10 @@
 
 import '../base/base_viewmodel.dart';
 import '../base/view_state.dart';
-import '../entities/cart.dart';
+import '../entities/bill.dart';
 import '../repository/order_repository.dart';
 
-class UnPaidOrderListProvider extends BaseViewModel<OrderRepository, CartItem> {
+class UnPaidOrderListProvider extends BaseViewModel<OrderRepository, BillEntity> {
   @override
   OrderRepository createRepository() => OrderRepository();
 
@@ -35,19 +35,20 @@ class UnPaidOrderListProvider extends BaseViewModel<OrderRepository, CartItem> {
   }
 
   // pay the cart item list
-  Future<void> payForOrderList() async {
-    final res = await repository.payOrders();
+  Future<void> payForOrderList(int id) async {
+    final res = await repository.payOrders(id);
     setViewStateByRes(res, successCode: 1);
     resetDataFetch();
+    dataList.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 
   // get order list total price
-  double getOrderTotalPrice(){
-    double res = 0;
-    for (var cartItem in dataList) {
-      res += cartItem.amount * cartItem.number;
-    }
-    return res;
-  }
+  // double getOrderTotalPrice(){
+  //   double res = 0;
+  //   for (var cartItem in dataList) {
+  //     res += cartItem.amount * cartItem.number;
+  //   }
+  //   return res;
+  // }
 }

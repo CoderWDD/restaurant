@@ -1,10 +1,11 @@
-
 import 'package:go_router/go_router.dart';
 import 'package:restaurant/entities/QRResEntity.dart';
+import 'package:restaurant/entities/bill.dart';
 import 'package:restaurant/screens/canteen/canteen_screen.dart';
 import 'package:restaurant/screens/canteen/restaurant_screen.dart';
 import 'package:restaurant/screens/food_detail/food_details_screen.dart';
 import 'package:restaurant/screens/login/login_screen.dart';
+import 'package:restaurant/screens/order/order_details_screen.dart';
 import 'package:restaurant/screens/order/paid_order_list_screen.dart';
 import 'package:restaurant/screens/order/un_paid_order_list_screen.dart';
 import 'package:restaurant/screens/qr_code_scan/qr_code_scan_screen.dart';
@@ -75,18 +76,24 @@ final GoRouter routers = GoRouter(
           return RestaurantScreen(canteen: Canteen.fromJson(data.query));
         }),
     GoRoute(
-      path: UNPAID_ORDER_LIST_SCREEN,
-      name: UNPAID_ORDER_LIST_SCREEN,
-      builder: (context, state) {
-        return const UnPaidOrderListScreen();
-      }
-    ),
+        path: UNPAID_ORDER_LIST_SCREEN,
+        name: UNPAID_ORDER_LIST_SCREEN,
+        builder: (context, state) {
+          return const UnPaidOrderListScreen();
+        }),
     GoRoute(
         path: PAID_ORDER_LIST_SCREEN,
         name: PAID_ORDER_LIST_SCREEN,
         builder: (context, state) {
           return const PaidOrderListScreen();
-        }
-    ),
+        }),
+    GoRoute(
+      path: ORDER_DETAILS_SCREEN,
+      name: ORDER_DETAILS_SCREEN,
+      builder: (context, state) {
+        final data = state.extra as GoRouterData;
+        return OrderDetailsScreen(billEntity: BillEntity.fromJson(data.query));
+      }
+    )
   ],
 );

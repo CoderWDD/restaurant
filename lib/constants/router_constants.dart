@@ -10,3 +10,4 @@ const String CANTEEN_SCREEN = '/qr_code_scan_screen';
 const String RESTAURANT_SCREEN = '/restaurant_screen';
 const String UNPAID_ORDER_LIST_SCREEN = '/unpaid_order_list_screen';
 const String PAID_ORDER_LIST_SCREEN = '/paid_order_list_screen';
+const String ORDER_DETAILS_SCREEN = '/order_details_screen';

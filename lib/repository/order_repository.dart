@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:restaurant/base/base_repository.dart';
+import 'package:restaurant/entities/bill.dart';
 import 'package:restaurant/entities/cart.dart';
 import 'package:restaurant/entities/category.dart';
 import 'package:restaurant/entities/pageable.dart';
@@ -48,8 +49,8 @@ class OrderRepository extends BaseRepository{
   }
 
   // pay the orders
-  Future<ApiResponse<String>> payOrders() async{
-    final res = await RestaurantDio().dio.get("/shoppingCart");
+  Future<ApiResponse<String>> payOrders(int id) async{
+    final res = await RestaurantDio().dio.put("/orders/$id");
     return ApiResponse.fromJson(res.data, (data) => data.toString());
   }
 
@@ -75,15 +76,15 @@ class OrderRepository extends BaseRepository{
   }
 
   // get the list of unpaid orders
-  Future<ApiResponse<ApiResponseData<CartItem>>> getUnpaidOrdersList({int page = 1, int size = 10}) async {
-    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size");
-    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
+  Future<ApiResponse<ApiResponseData<BillEntity>>> getUnpaidOrdersList({int page = 1, int size = 10}) async {
+    final res = await RestaurantDio().dio.get("/orders", queryParameters: {"page": page, "size": size});
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => BillEntity.fromJson(e)).where((element) => !element.isPayed).toList()));
   }
 
   // get the list of paid orders
-  Future<ApiResponse<ApiResponseData<CartItem>>> getPaidOrdersList({int page = 1, int size = 10}) async {
-    final res = await RestaurantDio().dio.get("/shoppingCart/$page/$size");
-    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => CartItem.fromJson(e)).toList()));
+  Future<ApiResponse<ApiResponseData<BillEntity>>> getPaidOrdersList({int page = 1, int size = 10}) async {
+    final res = await RestaurantDio().dio.get("/orders", queryParameters: {"page": page, "size": size});
+    return ApiResponse.fromJson(res.data, (data) => ApiResponseData.fromJson(data, (content) => (content as List).map((e) => BillEntity.fromJson(e)).where((value) => value.isPayed).toList()));
   }
 
   // get the unpaid order list
